@@ -85,6 +85,24 @@
             </div>
         </nav>
 
+        <div id="menubar">
+        <!-- Menu Bar -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="menu">
+                        <li><a href="">Dashboard</a></li>
+                        <li><a href="">Products</a></li>
+                        <li><a href="">Order</a></li>
+                        <li><a href="">Receiver</a></li>
+                        
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
         <main class="py-4">
