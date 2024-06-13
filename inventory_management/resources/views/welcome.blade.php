@@ -20,7 +20,9 @@
     </head>
     <body class="antialiased">
     <div class="container">
+
     <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
+
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
@@ -71,7 +73,9 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
+
                                 <button type="submit" class="btn btn-primary  ">
+
                                     {{ __('Login') }}
                                 </button>
 
@@ -88,6 +92,8 @@
         </div>
     </div>
 </div>
+
 <script src="{{asset('asset/js/bootstrap.bundle.min.js')}}"></script>
+
     </body>
 </html>

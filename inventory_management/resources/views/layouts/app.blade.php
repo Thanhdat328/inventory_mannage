@@ -14,9 +14,10 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
+
     <link rel="stylesheet" href="{{asset('asset/css/bootstrap.min.css')}}">
     <script src="{{asset('asset/js/bootstrap.bundle.min.js')}}"></script>
-    l
+    
 
 </head>
 <body>
@@ -56,6 +57,7 @@
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
                                 </a>
+
                                 <!-- <a href=""  onclick="document.getElementById('logout-form').submit();" hidden>
 
                                 {{ __('Logout') }}
@@ -82,6 +84,7 @@
                 </div>
             </div>
         </nav>
+
 
 
         <main class="py-4">
