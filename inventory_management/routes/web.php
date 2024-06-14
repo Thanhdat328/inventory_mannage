@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoriesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,19 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//menu
+Route::prefix('categores')->group(function(){
+
+    Route::get('/', [CategoriesController::class,'index'])->name('category');
+    Route::get('edit/{category}', [CategoriesController::class, 'edit'])->name('category.edit');
+    Route::post('edit/{category}', [CategoriesController::class, 'update'])->name('category.update');
+    Route::get('add', [CategoriesController::class, 'create']);
+
+    Route::post('store', [CategoriesController::class, 'store'])->name('category.store');
+    Route::delete('destroy/{category}', [CategoriesController::class, 'destroy'])->name('category.destroy');
+    Route::get('show/{category}', [CategoriesController::class, 'show'])->name('category.show');
+
+});
+
+

@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" href="{{asset('asset/css/bootstrap.min.css')}}">
     <script src="{{asset('asset/js/bootstrap.bundle.min.js')}}"></script>
-    
+
 
 </head>
 <body>
@@ -95,8 +95,9 @@
                         <li><a href="">Products</a></li>
                         <li><a href="">Order</a></li>
                         <li><a href="">Receiver</a></li>
-                        
-                        
+                        <li><a href="{{route('category')}}">Category</a></li>
+
+
                     </ul>
                 </div>
             </div>
@@ -108,6 +109,9 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <script src="https://kit.fontawesome.com/f6dce9b617.js" crossorigin="anonymous"></script>
     </div>
 </body>
+
 </html>
