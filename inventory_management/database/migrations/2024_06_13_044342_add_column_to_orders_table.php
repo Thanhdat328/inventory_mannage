@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('quantity');
             $table->timestamp('order_date');
 
+            $table->timestamp('return_date')->nullable();
+
         });
     }
 

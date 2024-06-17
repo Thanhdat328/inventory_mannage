@@ -2,7 +2,11 @@
 
 @section('content')
 <div class="container">
+
     <a href="categories/add"><i class="fa-solid fa-plus"></i> </a>
+
+    <a href="categores/add"><i class="fa-solid fa-plus"></i> </a>
+
 
     <table class="table">
         <thead>
@@ -23,16 +27,21 @@
                 </td>
                 <td> </td>
                 <td>
-                    <a href="{{route('category.edit',$category->id)}}"><i class="fa-regular fa-pen-to-square"></i></a>
+                    <th>  <a href="{{route('category.edit',$category->id)}}"><i class="fa-regular fa-pen-to-square"></i></a>
+                    </th>
+                    <th><form method="POST" action="{{route('category.destroy',$category->id)}}">
 
-                    <form method="POST" action="{{route('category.destroy',$category->id)}}">
                         @csrf
                         @method('DELETE')
                         <button onclick="return confirm('Are you sure you want to delete this category?')">
                             <i class="fa-regular fa-circle-xmark"></i>
                         </button>
-                    </form>
-                    <a href="{{route('category.show',$category->id)}}"><i class="fa-solid fa-eye"></i></a>
+
+                    </form></th>
+                    <th><a href="{{route('category.show',$category->id)}}"><i class="fa-solid fa-eye"></i></a></th>
+
+
+
                 </td>
             </tr>
             @endforeach
@@ -40,7 +49,7 @@
     </table>
 
     <!-- Hiển thị phân trang -->
-    <!-- {{--$category->links()--}} -->
+
  <!-- Đưa phân trang vào phần content -->
 </div>
 @endsection
