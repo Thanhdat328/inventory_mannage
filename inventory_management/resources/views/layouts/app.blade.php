@@ -21,7 +21,9 @@
     <script src="{{asset('asset/js/bootstrap.bundle.min.js')}}"></script>
 
 
-    <link rel="stylesheet" href="{{asset('asset/css/styles.css')}}">
+
+    <!-- <link rel="stylesheet" href="{{asset('asset/css/styles.css')}}"> -->
+
     
 
 
@@ -104,8 +106,11 @@
                         <li><a href="">Dashboard</a></li>
 
                         <li><a href="{{route('product')}}">Products</a></li>
-                        <li><a href="">Order</a></li>
-                        <li><a href="">Receiver</a></li>
+
+                    
+                        <li><a href="{{route('order_issue.create')}}">Order issue</a></li>
+                        <li><a href="{{route('receiver.index')}}">Receiver</a></li>
+
                         <li><a href="{{route('category')}}">Category</a></li>
 
 
@@ -129,10 +134,8 @@
     <script src="{{asset('asset/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('asset/js/jquery-3.7.1.min.js')}}"></script>
 
-            @yield('content')
-        </main>
-        <script src="https://kit.fontawesome.com/f6dce9b617.js" crossorigin="anonymous"></script>
-    </div>
+    <script src="https://kit.fontawesome.com/f6dce9b617.js" crossorigin="anonymous"></script>
+
 
 </body>
 

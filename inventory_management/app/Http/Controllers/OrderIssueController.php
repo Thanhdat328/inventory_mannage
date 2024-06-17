@@ -36,21 +36,35 @@ class OrderIssueController extends Controller
         $order->receiver_id = $request->input('receiver_id');
         $order->save();
 
-        foreach($order as $item) {
-            $order_detail = new OrderDetails();
-            $order_detail->order_id = $order->id;
-            $order_detail->product_id = $product->id;
-            $order_detail->quantity = $request->input('quantity');
-            $order_detail->issue_date = date('Y-m-d H:i:s');
+
+        $request->validate([
+            'addMoreInputFields.*.quantity' => 'required'
+        ]);
+   
+        $numberOfItems = count($request->addMoreInputFields);
+        for ($i = 1; $i < $numberOfItems; $i++) {
+            $value = $request->addMoreInputFields[$i];
+            $id1 = $request->product_id[$i];
+            OrderDetails::create([
+                'order_id' => $order->id,
+                'product_id' => $id1['product_id'],
+                'quantity' => $value['quantity'],
+                'issue_date' => date('Y-m-d H:i:s'),
+                'issue_starus' => 'Y',
+            ]);
+            $products = Product::find($id1['product_id']);
+            
+            $products->quantity = $products->quantity - $value['quantity'];
+                
+            $products->save();
+            
+            
         }
-
-        $order_detail->save();
-
         
-       
 
-        
         return redirect()->back()->with("success","Order added successfully");
+
+        
 
     }
 

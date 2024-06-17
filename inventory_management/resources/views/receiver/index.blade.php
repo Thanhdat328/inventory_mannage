@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="container">
-    <h1>{{$request_user->id}}</h1>
+
+
+    <h1>{{$request_user}}</h1>
+
     <a href="{{route('receiver.create')}}">+</a>
     <table>
         <thead>

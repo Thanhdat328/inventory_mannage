@@ -29,9 +29,9 @@ class CategoriesController extends Controller
     {
         //$category = DB::table('category')->paginate(2);
 
-      $category = Category::paginate();
+      $categories = Category::paginate(5);
 
-      return view('category.index', compact('category'));
+      return view('category.index', compact('categories'));
 
     }
 ////////////////////////////////////////////////////////////// update category

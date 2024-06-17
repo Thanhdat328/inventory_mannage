@@ -20,6 +20,7 @@ return new class extends Migration
 
             $table->timestamp('return_date')->nullable();
 
+
         });
     }
 

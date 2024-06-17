@@ -8,7 +8,10 @@ use App\Http\Controllers\ReceiverController;
 use App\Http\Controllers\OrderIssueController;
 
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CategoriesController;
+
+
+
+
 
 
 /*
@@ -63,7 +66,7 @@ Route::get('receiver/view/{id}',[ReceiverController::class, 'view'])->name('rece
 Route::get('order_issue', [OrderIssueController::class, 'index'])->name('order_issue.index');
 Route::get('order_issue/create', [OrderIssueController::class, 'create'])->name('order_issue.create');
 Route::post('order_issue/create', [OrderIssueController::class, 'addProductToOrder'])->name('order_issue.addProductToOrder');
-=======
+
   #Product
   Route::prefix('products')->group(function () {
 
