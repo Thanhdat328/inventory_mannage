@@ -31,11 +31,10 @@ class OrderIssueController extends Controller
         
         $product = Product::find($request->product_id);
         $order = new Order();
-       
+        $order->name = $request->input('order_name');
         $order->user_id = Auth::user()->id;
         $order->receiver_id = $request->input('receiver_id');
         $order->save();
-
 
         $request->validate([
             'addMoreInputFields.*.quantity' => 'required'

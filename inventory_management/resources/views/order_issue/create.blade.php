@@ -7,11 +7,13 @@
 
     <form action="{{route('order_issue.addProductToOrder')}}" method="post">
         @csrf
+        Order name: <input type="text" name="order_name" value="{{ Auth::user()->name }}">
         <select name="receiver_id" id="">
         @foreach ($receivers as $receiver)
         <option value="{{$receiver->id}}">{{$receiver->name}}</option>
         @endforeach
         </select>
+        
         
         
 
@@ -59,12 +61,8 @@
 <script type="text/javascript">
     var i = 0;
     $(".dynamic-ar").click(function () {
-        ++i;
-        
-            $(this).attr("hidden", true);
-           
-        
-        
+        ++i;  
+        $(this).attr("hidden", true);
         var product_id = $(this).closest('tr').find('input[name="product_id[0][product_id]"]').val();
 
         $("#dynamicAddRemove").append('<tr><td><input name="product_id['+i+'][product_id]" value="'+product_id+'"></input></td></tr></tr><tr><td><input type="text" name="addMoreInputFields[' + i +
@@ -76,6 +74,7 @@
     });
     $(document).on('click', '.remove-input-field', function () {
         $(this).parents('tr').remove();
+        
     });
 </script>
 
