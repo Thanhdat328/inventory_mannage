@@ -34,6 +34,7 @@ class OrderIssueController extends Controller
         $order->name = $request->input('order_name');
         $order->user_id = Auth::user()->id;
         $order->receiver_id = $request->input('receiver_id');
+        $order->order_date = date('Y-m-d');
         $order->save();
 
         $request->validate([
