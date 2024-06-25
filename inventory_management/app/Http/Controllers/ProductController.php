@@ -51,7 +51,9 @@ class ProductController extends Controller
     {
 
         $product = Product::find($id);
-      $category = Category::all();
+
+        $category = Category::all();
+
       return view('product.edit', ['category' => $category, 'product' => $product]);
     }
     public function update(Request $request, $id)
@@ -61,14 +63,22 @@ class ProductController extends Controller
         'quantity'=>'required|numeric',
 
       ]);
-      $products = new Product();
-          $products->category_id=$request->input('category');
-          $products->user_id = Auth::user()->id;
-          $products->name = $request->name;
-          $products->quantity = $request->quantity;
-          $products->save();
 
-          return redirect()->route('product')->with('success', 'Thêm sản phẩm thành công');
+      $products = Product::find($id);
+      $products->category_id=$request->input('category');
+      $products->user_id = Auth::user()->id;
+      $products->name = $request->name;
+      $products->quantity = $request->quantity;
+      if( $products->quantity>0){
+        $products->status = 'Y';
+      }
+      else{
+        $products->status = 'N';
+      }
+      $products->save();
+
+      return redirect()->route('product')->with('success', 'Thêm sản phẩm thành công');
+
 
     }
     //

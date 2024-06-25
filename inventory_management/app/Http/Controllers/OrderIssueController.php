@@ -31,9 +31,11 @@ class OrderIssueController extends Controller
         
         $product = Product::find($request->product_id);
         $order = new Order();
-       
+
+        $order->name = $request->input('order_name');
         $order->user_id = Auth::user()->id;
         $order->receiver_id = $request->input('receiver_id');
+        $order->order_date = date('Y-m-d');
         $order->save();
 
 
@@ -54,13 +56,27 @@ class OrderIssueController extends Controller
             ]);
             $products = Product::find($id1['product_id']);
             
-            $products->quantity = $products->quantity - $value['quantity'];
-                
-            $products->save();
+
+            
+            if($value['quantity'] > $products->quantity)
+            {
+                return redirect()->back()->with("error","Quantity is not enough");
+            }
+            else{
+                $products->quantity = $products->quantity - $value['quantity'];
+            }
+
+            if($products->quantity > 0){
+                $products->status = 'Y';
+                $products->save();
+            }
+            else{
+                $products->status = 'N';
+                $products->save();
+            }
             
             
         }
-        
 
         return redirect()->back()->with("success","Order added successfully");
 
