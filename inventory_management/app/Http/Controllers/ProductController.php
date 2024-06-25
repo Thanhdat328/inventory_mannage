@@ -12,7 +12,7 @@ class ProductController extends Controller
 
     public function index()
     {
-         // Phân trang với 10 sản phẩm m��i trang
+        
         $product = Product::all();
         $category = Category::all();
 
@@ -51,9 +51,12 @@ class ProductController extends Controller
     {
 
         $product = Product::find($id);
+
         $category = Category::all();
+
       return view('product.edit', ['category' => $category, 'product' => $product]);
     }
+
     public function update(Request $request, $id)
     {
       $request->validate([
@@ -61,6 +64,7 @@ class ProductController extends Controller
         'quantity'=>'required|numeric',
 
       ]);
+
       $products = Product::find($id);
       $products->category_id=$request->input('category');
       $products->user_id = Auth::user()->id;
@@ -75,11 +79,5 @@ class ProductController extends Controller
       $products->save();
 
       return redirect()->route('product')->with('success', 'Thêm sản phẩm thành công');
-
     }
-    //
-
-
-
-
 }

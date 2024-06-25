@@ -21,7 +21,7 @@ class ReportController extends Controller
     {
         $request->validate(['date' => "required|date"]);
         return view('report.dateWise', [
-            'orders' => Order::where('order_date', $request->date)->latest()->get()
+            'orders' => Order::where('order_date', 'LIKE', '%' . $request->date . '%')->latest()->get()
         ]);
     }
 
@@ -38,8 +38,9 @@ class ReportController extends Controller
         ]);
     }
 
-    
-    
-
-    
+    public function report_details($id)
+    {
+        $order = Order::find($id);
+        return view('report.reportDetail', ['order' => $order]);
+    }
 }

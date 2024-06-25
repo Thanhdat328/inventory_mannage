@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 use App\Http\Controllers\ReportController;
 
 use App\Http\Controllers\ProductController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\ReceiverController;
 
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\OrderIssueController;
+
 
 
 
@@ -66,13 +68,16 @@ Route::get('order_issue/create', [OrderIssueController::class, 'create'])->name(
 Route::post('order_issue/create', [OrderIssueController::class, 'addProductToOrder'])->name('order_issue.addProductToOrder');
 
   #Product
+
 Route::prefix('products')->group(function () {
+
 
     Route::get('/', [ProductController::class, 'index'])->name('product');
     Route::post('store', [ProductController::class, 'store'])->name('product.store');
     Route::get('add', [ProductController::class, 'create'])->name('product.create');
     Route::get('edit/{product}', [ProductController::class, 'edit'])->name('product.edit');
     Route::post('edit/{product}', [ProductController::class, 'update'])->name('product.update');
+
 });
 
 //Report
@@ -81,4 +86,5 @@ Route::get('report/date', [ReportController::class, 'date_wise'])->name('report.
 Route::post('report/date', [ReportController::class, 'generate_date_wise_report'])->name('report.generate_date');
 Route::get('report/month', [ReportController::class, 'month_wise'])->name('report.month');
 Route::post('report/month', [ReportController::class, 'generate_month_wise_report'])->name('report.generate_month');
+Route::get('report/{id}', [ReportController::class, 'report_details'])->name('report.report_detail');
 
