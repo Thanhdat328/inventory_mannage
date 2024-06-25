@@ -18,7 +18,7 @@ class Order extends Model
         return $this->belongsTo(Receiver::class);
     }
 
-    public function details(): HasMany
+    public function details()
     {
         return $this->hasMany(OrderDetails::class);
     }

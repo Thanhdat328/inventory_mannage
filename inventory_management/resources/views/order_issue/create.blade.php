@@ -8,7 +8,10 @@
     <form action="{{route('order_issue.addProductToOrder')}}" method="post">
         @csrf
 
-        Order name: <input type="text" name="order_name" value="{{ Auth::user()->name }}">
+        
+        
+        Order name: <input type="text" name="order_name" value="Order {{$orders->id + 1}}">
+
 
         <select name="receiver_id" id="">
         @foreach ($receivers as $receiver)

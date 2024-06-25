@@ -12,7 +12,7 @@ class ProductController extends Controller
 
     public function index()
     {
-         // Phân trang với 10 sản phẩm m��i trang
+        
         $product = Product::all();
         $category = Category::all();
 
@@ -56,6 +56,7 @@ class ProductController extends Controller
 
       return view('product.edit', ['category' => $category, 'product' => $product]);
     }
+
     public function update(Request $request, $id)
     {
       $request->validate([
@@ -79,11 +80,5 @@ class ProductController extends Controller
 
       return redirect()->route('product')->with('success', 'Thêm sản phẩm thành công');
 
-
     }
-    //
-
-
-
-
 }

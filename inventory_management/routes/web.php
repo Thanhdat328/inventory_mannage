@@ -86,5 +86,7 @@ Route::get('report/date', [ReportController::class, 'date_wise'])->name('report.
 Route::post('report/date', [ReportController::class, 'generate_date_wise_report'])->name('report.generate_date');
 Route::get('report/month', [ReportController::class, 'month_wise'])->name('report.month');
 Route::post('report/month', [ReportController::class, 'generate_month_wise_report'])->name('report.generate_month');
->>>>>>> report
+
+Route::get('report/{id}', [ReportController::class, 'report_details'])->name('report.report_detail');
+
 

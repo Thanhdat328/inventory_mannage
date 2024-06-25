@@ -18,39 +18,36 @@
                 <input type="submit" class="btn btn-danger" name="search_date" value="Search">
             </form>
         </div>
-        @if ($orders)
-                <div class="row">
-                    <div class="col-md-12">
-                        <table class="content-table">
-                            <thead>
-                                <th>S.No</th>
-                                
-                                <th>Order Name</th>
-                                
-                                <th>Issue Date</th>
-                            </thead>
-                            <tbody>
-                                @forelse ($orders as $order)
-                                    <tr>
-                                        <td>{{ $order->id }}</td>
-                                       
-                                        <td>{{ $order->name }}</td>
-                                        
-                                        <td>{{ $order->created_at->format('d M, Y') }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="10">No Record Found!</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        @if ($orders)              
+            <table class="table table-bordered" id="dynamicAddRemove">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Order Name</th>
+                        <th>Receiver</th>
+                        <th>Issue Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($orders as $order)
+                        <tr>
+                            <td>{{ $order->id }}</td>
+                            <td>{{ $order->name }}</td>
+                            <td>{{ $order->receiver->name}}</td>
+                            <td>{{ $order->created_at->format('d, M, Y') }}</td>
+                            <td>
+                                <a href="{{route('report.report_detail', $order->id)}}">View</a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="10">No Record Found!</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         @endif
     </div>
-
-    <button onclick="window.print()">Print</button>
 </div>
 
 @endsection
