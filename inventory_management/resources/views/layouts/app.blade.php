@@ -16,7 +16,7 @@
     <!-- Scripts -->
 
     <link rel="stylesheet" href="{{asset('asset/css/bootstrap.min.css')}}">
-
+    <link rel="stylesheet" href="style.css">
 
     <script src="{{asset('asset/js/bootstrap.bundle.min.js')}}"></script>
 

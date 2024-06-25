@@ -1,14 +1,16 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
+
 use Illuminate\Support\Facades\Route;
 
-
 use App\Http\Controllers\ReportController;
-
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ReceiverController;
 
+use App\Http\Controllers\ReceiverController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\OrderIssueController;
 
 
@@ -86,5 +88,4 @@ Route::get('report/date', [ReportController::class, 'date_wise'])->name('report.
 Route::post('report/date', [ReportController::class, 'generate_date_wise_report'])->name('report.generate_date');
 Route::get('report/month', [ReportController::class, 'month_wise'])->name('report.month');
 Route::post('report/month', [ReportController::class, 'generate_month_wise_report'])->name('report.generate_month');
->>>>>>> report
 
