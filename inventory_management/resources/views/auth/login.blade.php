@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.welcome')
 
 @section('content')
 
@@ -67,7 +67,7 @@
 
                             <div class="row mb-0">
                                 <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-success">
+                                    <button type="submit" class="btn btn-success btn-bg">
                                         {{ __('Login') }}
                                     </button>
 
