@@ -27,23 +27,14 @@
                         <td>{{ $product->damaged }}</td>
                         <td>{{ $product->status }}</td>
                         <td>
-                        <div>{{ $product->category->name }}</div>
 
-
-
-                         </td>
-
-
-
-
+                            <div>{{ $product->category->name }}</div>
+                        </td>
                         <td>
-                             <th><a href="{{ route('product.edit',$product->id) }}">  <i class="fa-regular fa-pen-to-square"></i></a>
-                            </th>
+                            <th><a href="{{ route('product.edit',$product->id) }}"><i class="fa-regular fa-pen-to-square"></i></a></th>
                             <th></th>
+                        </td>
 
-
-
-                    </td>
                     </tr>
                 @endforeach
             </tbody>

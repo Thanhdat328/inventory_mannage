@@ -41,6 +41,7 @@ class ReportController extends Controller
     public function report_details($id)
     {
         $order = Order::find($id);
+
         return view('report.reportDetail', ['order' => $order]);
     }
 }

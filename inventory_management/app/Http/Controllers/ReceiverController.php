@@ -25,10 +25,12 @@ class ReceiverController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' =>'required',
-            'email' =>'required',
-            'phone' =>'required',
-            'address' =>'required',
+
+            'name' =>'required|max:100|max:100',
+            'email' =>'required|max:100|max:100',
+            'phone' =>'required|max:100|max:100',
+            'address' =>'required|max:100|max:100',
+
         ]);
 
         $receiver = new Receiver();
@@ -51,10 +53,12 @@ class ReceiverController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' =>'required',
-            'email' =>'required',
-            'phone' =>'required',
-            'address' =>'required',
+
+            'name' =>'required|max:100',
+            'email' =>'required|max:100',
+            'phone' =>'required|max:100',
+            'address' =>'required|max:100',
+
         ]);
 
         $receiver = Receiver::find($id);

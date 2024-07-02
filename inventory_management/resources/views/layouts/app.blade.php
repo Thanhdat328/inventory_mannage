@@ -108,17 +108,11 @@
                         <li><a href="">Dashboard</a></li>
 
                         <li><a href="{{route('product')}}">Products</a></li>
-
-                    
                         <li><a href="{{route('order_issue.create')}}">Order issue</a></li>
                         <li><a href="{{route('receiver.index')}}">Receiver</a></li>
-
                         <li><a href="{{route('category')}}">Category</a></li>
-
                         <li><a href="{{route('report.index')}}">Report</a></li>
-
-
-
+                        <li><a href="{{route('return_order.index')}}">Return</a></li>
 
                     </ul>
                 </div>
