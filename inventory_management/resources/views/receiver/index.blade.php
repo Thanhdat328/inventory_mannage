@@ -1,18 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-
-
-    <h1>{{$request_user}}</h1>
-
+<div class="container table-responsive">
     <a href="{{route('receiver.create')}}">+</a>
-    <table>
+    <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Option</th>
-                <th>Default</th>
-                <th>Description</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -71,23 +67,22 @@
         });
 
         
-        $(".delete-student").on("click", function() {
-            var s_id = $(this).data("sid");
-            $.ajax({
-                url: "delete-student.php",
-                type: "POST",
-                data: {
-                    sid: s_id
-                },
-                success: function(data) {
-                    $(".message").html(data);
-                    setTimeout(function() {
-                        window.location.reload();
-                    }, 2000);
-                }
-            });
-        });
+        // $(".delete-receiver").on("click", function() {
+        //     var s_id = $(this).data("sid");
+        //     $.ajax({
+        //         url: "delete-receiver.php",
+        //         type: "POST",
+        //         data: {
+        //             sid: s_id
+        //         },
+        //         success: function(data) {
+        //             $(".message").html(data);
+        //             setTimeout(function() {
+        //                 window.location.reload();
+        //             }, 2000);
+        //         }
+        //     });
+        // });
     </script>
-
 
 @endsection

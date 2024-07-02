@@ -28,19 +28,18 @@ class OrderIssueController extends Controller
     
     public function addProductToOrder(Request $request)
     {
-        
         $product = Product::find($request->product_id);
-        $order = new Order();
 
+        $order = new Order();
         $order->name = $request->input('order_name');
         $order->user_id = Auth::user()->id;
         $order->receiver_id = $request->input('receiver_id');
         $order->order_date = date('Y-m-d H:i:s');
         $order->save();
 
-
         $request->validate([
-            'addMoreInputFields.*.quantity' => 'required'
+            'addMoreInputFields.*.quantity' => 'required',
+            'order_name' => 'required|max:50'
         ]);
    
         $numberOfItems = count($request->addMoreInputFields);
@@ -55,8 +54,6 @@ class OrderIssueController extends Controller
                 'issue_starus' => 'Y',
             ]);
             $products = Product::find($id1['product_id']);
-            
-
             
             if($value['quantity'] > $products->quantity)
             {
@@ -73,15 +70,9 @@ class OrderIssueController extends Controller
             else{
                 $products->status = 'N';
                 $products->save();
-            }
-            
-            
+            } 
         }
-
         return redirect()->back()->with("success","Order added successfully");
-
-        
-
     }
 
     public function StoreProductOrder(Request $request) 

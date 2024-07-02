@@ -93,3 +93,5 @@ Route::get('report/{id}', [ReportController::class, 'report_details'])->name('re
 Route::get('return_order', [ReturnOrderCotroller::class, 'index'])->name('return_order.index');
 Route::get('return_order/{id}', [ReturnOrderCotroller::class, 'show'])->name('return_order.show');
 Route::put('return_order/{id}/return', [ReturnOrderCotroller::class, 'returnOrder'])->name('return_order.main');
+Route::get('return_order/{orderId}/{itemId}/editDamage/{id}', [ReturnOrderCotroller::class, 'editDamageView'])->name('return_order.edit_damage');
+Route::put('return_order/{orderId}/{productId}/updateDamage', [ReturnOrderCotroller::class, 'updateDamage'])->name('return_order.update_damage');
