@@ -12,7 +12,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        
+
         $product = Product::all();
         $category = Category::all();
 
@@ -80,5 +80,12 @@ class ProductController extends Controller
 
       return redirect()->route('product')->with('success', 'Thêm sản phẩm thành công');
 
+    }
+    public function destroy($id)
+    {
+        $product = Product::find($id);
+        $product->delete();
+        return redirect()->route('product')
+          ->with('success', 'Post deleted successfully');
     }
 }

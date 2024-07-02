@@ -77,6 +77,7 @@ Route::prefix('products')->group(function () {
     Route::get('add', [ProductController::class, 'create'])->name('product.create');
     Route::get('edit/{product}', [ProductController::class, 'edit'])->name('product.edit');
     Route::post('edit/{product}', [ProductController::class, 'update'])->name('product.update');
+    Route::delete('destroy/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
 
 });
 
