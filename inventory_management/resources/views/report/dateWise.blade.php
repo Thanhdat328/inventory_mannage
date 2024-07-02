@@ -39,6 +39,7 @@
                         <td>
                             <a href="{{route('report.report_detail', $order->id)}}">View</a>
                         </td>
+                        <td> <a href="{{route('report.edit', $order->id)}}">edit</a></td>
                     </tr>
                 @empty
                     <tr>
@@ -47,6 +48,6 @@
                 @endforelse
             </tbody>
         </table>
-    @endif 
+    @endif
 </div>
 @endsection

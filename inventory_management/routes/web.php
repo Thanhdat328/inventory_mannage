@@ -84,6 +84,7 @@ Route::prefix('products')->group(function () {
     Route::get('add', [ProductController::class, 'create'])->name('product.create');
     Route::get('edit/{product}', [ProductController::class, 'edit'])->name('product.edit');
     Route::post('edit/{product}', [ProductController::class, 'update'])->name('product.update');
+    Route::delete('destroy/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
 
 });
 
@@ -95,11 +96,8 @@ Route::get('report/month', [ReportController::class, 'month_wise'])->name('repor
 Route::post('report/month', [ReportController::class, 'generate_month_wise_report'])->name('report.generate_month');
 
 Route::get('report/{id}', [ReportController::class, 'report_details'])->name('report.report_detail');
+Route::get('report/{id}/edit', [ReportController::class, 'edit'])->name('report.edit');
+Route::post('report/{id}/edit', [ReportController::class, 'update'])->name('report.update');
 
-//Return order
-Route::get('return_order', [ReturnOrderCotroller::class, 'index'])->name('return_order.index');
-Route::get('return_order/{id}', [ReturnOrderCotroller::class, 'show'])->name('return_order.show');
-Route::put('return_order/{id}/return', [ReturnOrderCotroller::class, 'returnOrder'])->name('return_order.main');
-Route::get('return_order/{orderId}/{itemId}/editDamage/{id}', [ReturnOrderCotroller::class, 'editDamageView'])->name('return_order.edit_damage');
-Route::put('return_order/{orderId}/{productId}/updateDamage', [ReturnOrderCotroller::class, 'updateDamage'])->name('return_order.update_damage');
+
 

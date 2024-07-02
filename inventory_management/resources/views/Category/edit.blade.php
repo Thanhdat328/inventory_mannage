@@ -11,8 +11,9 @@
             <input type="text" class="form-control" id="name" name="name" value="{{$category->name}}">
         </div>
 
+
         <button>update</button>
     </form>
-    
+
 </div>
 @endsection

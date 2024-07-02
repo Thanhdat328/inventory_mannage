@@ -27,14 +27,27 @@
                         <td>{{ $product->damaged }}</td>
                         <td>{{ $product->status }}</td>
                         <td>
+                        <div>{{ $product->category->name }}</div>
+                         </td>
 
-                            <div>{{ $product->category->name }}</div>
-                        </td>
+
+
+
                         <td>
-                            <th><a href="{{ route('product.edit',$product->id) }}"><i class="fa-regular fa-pen-to-square"></i></a></th>
-                            <th></th>
-                        </td>
+                             <th><a href="{{ route('product.edit',$product->id) }}">  <i class="fa-regular fa-pen-to-square"></i></a>
+                            </th>
+                                      <th><form method="POST" action="{{route('product.destroy',$product->id)}}">
 
+                        @csrf
+                        @method('DELETE')
+                        <button onclick="return confirm('Are you sure you want to delete this product?')">
+                            <i class="fa-regular fa-circle-xmark"></i>
+                        </button>
+
+                    </form></th>
+                            <th></th>
+
+                    </td>
                     </tr>
                 @endforeach
             </tbody>
