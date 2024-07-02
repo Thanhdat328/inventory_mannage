@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -9,6 +12,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceiverController;
 
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\OrderIssueController;
 
 use App\Http\Controllers\ReturnOrderCotroller;
