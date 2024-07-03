@@ -16,11 +16,17 @@
     <!-- Scripts -->
 
     <link rel="stylesheet" href="{{asset('asset/css/bootstrap.min.css')}}">
-
+    <link rel="stylesheet" href="style.css">
 
     <script src="{{asset('asset/js/bootstrap.bundle.min.js')}}"></script>
 
-    <link rel="stylesheet" href="{{asset('asset/css/style.css')}}">
+
+
+    <!-- <link rel="stylesheet" href="{{asset('asset/css/styles.css')}}"> -->
+
+    
+
+
 
     <script src="{{asset('asset/js/bootstrap.bundle.min.js')}}"></script>
 
@@ -28,9 +34,7 @@
 </head>
 <body>
     <div id="app">
-
         <nav class="navbar navbar-expand-md navbar-dark bg-hd shadow-sm">
-
             <div class="container">
 
                 <a class="navbar-brand" href="{{ url('/home') }}">
@@ -95,24 +99,6 @@
             </div>
         </nav>
 
-        <div id="menubar">
-        <!-- Menu Bar -->
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="menu">
-                        <li class="menu-bar bg-hd"><a class=" menu-hv-1" href="">Dashboard</a></li>
-                        <li class="menu-bar bg-light"><a class=" menu-hv-2" href="{{route('product')}}">Products</a></li>
-                        <li class="menu-bar bg-hd"><a class=" menu-hv-1" href="{{route('order_issue.create')}}">Order issue</a></li>
-                        <li class="menu-bar bg-light"><a class=" menu-hv-2" href="{{route('receiver.index')}}">Receiver</a></li>
-                        <li class="menu-bar bg-hd"><a class=" menu-hv-1" href="{{route('category')}}">Category</a></li>
-                        <li class="menu-bar bg-light"><a class=" menu-hv-2" href="{{route('report.index')}}">Report</a></li>
-                        <li class="menu-bar bg-hd"><a class="menu-hv-1" href="{{route('return_order.index')}}">Return order</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 

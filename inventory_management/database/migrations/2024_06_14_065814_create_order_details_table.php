@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('return_date')->nullable();
             $table->string('issue_starus')->nullable();
             $table->timestamp('return_day')->nullable();
-            $table->timestamp();
+            $table->timestamps();
         });
     }
 

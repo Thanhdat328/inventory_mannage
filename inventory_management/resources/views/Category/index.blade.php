@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 
-  
+
 
     <a href="categores/add"><i class="fa-solid fa-plus"></i> </a>
 
@@ -19,7 +19,9 @@
             </tr>
         </thead>
         <tbody>
+
             @foreach($categories as $category) <!-- Sửa $category thành $categories -->
+
             <tr>
                 <td>{{$category->id}}</td>
                 <td>
@@ -48,8 +50,9 @@
         </tbody>
     </table>
 
-    <!-- Hiển thị phân trang -->
+    
+
     {{ $categories->links()}}
- <!-- Đưa phân trang vào phần content -->
+
 </div>
 @endsection

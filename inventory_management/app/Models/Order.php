@@ -2,10 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Receiver;
+use App\Models\OrderDetails;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class Order extends Model
 {
     use HasFactory;
+
+
+    public function receiver()
+    {
+        return $this->belongsTo(Receiver::class);
+    }
+
+    public function details()
+    {
+        return $this->hasMany(OrderDetails::class);
+    }
+
 }

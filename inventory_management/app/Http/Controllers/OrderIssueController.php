@@ -21,27 +21,37 @@ class OrderIssueController extends Controller
     {
         $products = Product::where('status','Y')->get();
         $receivers = Receiver::latest()->get();
-
-        return view('order_issue.create', ['products'=>$products], ['receivers'=>$receivers]);
+        $orders = Order::orderBy('order_date','DESC')->first();;
+        return view('order_issue.create', ['products'=>$products, 'receivers'=>$receivers, 'orders'=>$orders]);
         
     }
     
     public function addProductToOrder(Request $request)
     {
-        
-        $product = Product::find($request->product_id);
-        $order = new Order();
-       
-        $order->user_id = Auth::user()->id;
-        $order->receiver_id = $request->input('receiver_id');
-        $order->save();
 
         $request->validate([
-            'addMoreInputFields.*.quantity' => 'required'
+            'receiver_id' => 'required',
+            'addMoreInputFields.*.quantity' => 'required',
+            'order_name' => 'required|max:50',
+       
+
         ]);
+        
+        $product = Product::find($request->product_id);
+
+        $order = new Order();
+
+        $order->name = $request->input('order_name');
+        $order->user_id = Auth::user()->id;
+        $order->receiver_id = $request->input('receiver_id');
+        $order->order_date = date('Y-m-d H:i:s');
+        $order->save();
+
+       
+        
    
         $numberOfItems = count($request->addMoreInputFields);
-        for ($i = 1; $i < $numberOfItems; $i++) {
+        for ($i = 1; $i <= $numberOfItems; $i++) {
             $value = $request->addMoreInputFields[$i];
             $id1 = $request->product_id[$i];
             OrderDetails::create([
@@ -53,17 +63,26 @@ class OrderIssueController extends Controller
             ]);
             $products = Product::find($id1['product_id']);
             
-            $products->quantity = $products->quantity - $value['quantity'];
-                
-            $products->save();
-            
-            
+
+            if($value['quantity'] > $products->quantity)
+            {
+                return redirect()->back()->with("error","Quantity is not enough");
+            }
+            else{
+                $products->quantity = $products->quantity - $value['quantity'];
+            }
+
+            if($products->quantity > 0){
+                $products->status = 'Y';
+                $products->save();
+            }
+            else{
+                $products->status = 'N';
+                $products->save();
+
+            } 
         }
-        
-
         return redirect()->back()->with("success","Order added successfully");
-
-        
 
     }
 
