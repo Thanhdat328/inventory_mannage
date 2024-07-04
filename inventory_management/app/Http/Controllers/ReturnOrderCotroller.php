@@ -12,7 +12,7 @@ class ReturnOrderCotroller extends Controller
 {
     public function index()
     {
-        $orders = Order::latest()->get();
+        $orders = Order::where('delete_flag', 0)->latest()->get();
         return view('return_order.index', ['orders' => $orders]);
     }
 
@@ -36,28 +36,9 @@ class ReturnOrderCotroller extends Controller
             $product->save();
         }
         $order = Order::find($id);
-        $order->delete();
+        $order->delete_flag = true;
+        $order->save();
         return redirect()->route('return_order.index');
-    }
-
-    public function returnOrderDetails(Request $request, $id)
-    { 
-        $request->validate([
-            'productId.*' => 'required',
-            'quantity.*' => 'required',
-        ]);
-        $condition = $request->productId;
-        foreach ($condition as $key => $condition)
-        {
-            $product = Product::find($conditon);
-            $product->quantity = $product->quantity + $request->quantity[$key];
-            $product->save();
-        }
-        $order = Order::find($id);
-        // $order->status = "D";
-        // $order->save();
-        $order->delete();
-        return redirect()->routte('return_order.index');
     }
 
     public function updateDamage(Request $request,  $orderDetailId, $productId)

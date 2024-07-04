@@ -6,16 +6,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
+use App\Http\Controllers\HomeController;
+
 use App\Http\Controllers\ReportController;
-
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ReceiverController;
 
+use App\Http\Controllers\ReceiverController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CustomAuthController;
-use App\Http\Controllers\OrderIssueController;
 
+use App\Http\Controllers\OrderIssueController;
 use App\Http\Controllers\ReturnOrderCotroller;
+
 
 
 
@@ -44,7 +46,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/order/show/{id}', [HomeController::class, 'show'])->name('home.show');
+Route::put('/order/{id}/approve', [HomeController::class, 'approved'])->name('home.approved');
+Route::post('/order/{id}/rejected', [HomeController::class, 'rejected'])->name('home.rejected');
 
 //menu
 Route::prefix('categores')->group(function(){
@@ -99,5 +104,11 @@ Route::get('report/{id}', [ReportController::class, 'report_details'])->name('re
 Route::get('report/{id}/edit', [ReportController::class, 'edit'])->name('report.edit');
 Route::post('report/{id}/edit', [ReportController::class, 'update'])->name('report.update');
 
+//Return order
+Route::get('return_order', [ReturnOrderCotroller::class, 'index'])->name('return_order.index');
+Route::get('return_order/{id}', [ReturnOrderCotroller::class, 'show'])->name('return_order.show');
+Route::put('return_order/{id}/return', [ReturnOrderCotroller::class, 'returnOrder'])->name('return_order.main');
+Route::get('return_order/{orderId}/{itemId}/editDamage/{id}', [ReturnOrderCotroller::class, 'editDamageView'])->name('return_order.edit_damage');
+Route::put('return_order/{orderId}/{productId}/updateDamage', [ReturnOrderCotroller::class, 'updateDamage'])->name('return_order.update_damage');
 
 

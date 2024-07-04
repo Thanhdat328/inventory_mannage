@@ -11,8 +11,9 @@
             <input type="text" class="form-control" id="name" name="name" required>
         </div>
         <div class="form-group">
-            <select name="category" id="">
-                <option value="">Select Category</option>
+            <label for="category">Category:</label>
+            <select class=form-control name="category" id="">
+                <option value="" hidden>Select Category</option>
                 @foreach($category as $category)
                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach

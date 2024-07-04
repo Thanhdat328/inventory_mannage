@@ -42,7 +42,7 @@
                         <td> <a href="{{route('report.edit', $order->id)}}">edit</a></td>
                     </tr>
                 @empty
-                    <tr>
+                    <tr class="text-center">
                         <td colspan="10">No Record Found!</td>
                     </tr>
                 @endforelse

@@ -84,9 +84,7 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-</div>
-@endsection
+
 </body>
 
 </html>

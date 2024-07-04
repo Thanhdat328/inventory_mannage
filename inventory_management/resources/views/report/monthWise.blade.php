@@ -40,7 +40,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
+                        <tr class="text-center">
                             <td colspan="10">No Record Found!</td>
                         </tr>
                     @endforelse

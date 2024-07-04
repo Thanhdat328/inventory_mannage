@@ -5,13 +5,15 @@
     <h1>Add Product</h1>
     <form method="POST" action="{{ route('product.update',$product->id) }}">
         @csrf
-
+        
+        <input type="hidden" name="user_id" value="{{$product->user_id}}" >
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" class="form-control" id="name" name="name" value="{{$product->name}}" required>
         </div>
         <div class="form-group">
-            <select name="category" id="">
+            <label for="category">Category:</label>
+            <select class=form-control name="category" id="">
                 
                 @foreach($category as $category)
                 <option value="{{ $category->id }}">{{ $category->name }}</option>

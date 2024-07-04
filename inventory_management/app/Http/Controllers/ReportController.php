@@ -25,7 +25,7 @@ class ReportController extends Controller
     {
         $request->validate(['date' => "required|date"]);
         return view('report.dateWise', [
-            'orders' => Order::where('order_date', 'LIKE', '%' . $request->date . '%')->latest()->get()
+            'orders' => Order::where('order_date', 'LIKE', '%' . $request->date . '%')->where('delete_flag', 0)->latest()->get()
         ]);
     }
 
@@ -38,7 +38,7 @@ class ReportController extends Controller
     {
         $request->validate(['month' => "required|date"]);
         return view('report.monthWise', [
-            'orders' => Order::where('order_date', 'LIKE', '%' . $request->month . '%')->latest()->get(),
+            'orders' => Order::where('order_date', 'LIKE', '%' . $request->month . '%')->where('delete_flag', 0)->latest()->get(),
         ]);
     }
 

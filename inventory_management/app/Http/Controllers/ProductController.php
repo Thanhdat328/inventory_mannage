@@ -32,7 +32,7 @@ class ProductController extends Controller
 
             'name' => 'required|max:255',
             'quantity'=>'required|numeric',
-
+            'category' => 'required'
 
           ]);
           $products = new Product();
@@ -64,10 +64,10 @@ class ProductController extends Controller
         'quantity'=>'required|numeric',
 
       ]);
-
+      
       $products = Product::find($id);
       $products->category_id=$request->input('category');
-      $products->user_id = Auth::user()->id;
+      $products->user_id = $request->input('user_id');
       $products->name = $request->name;
       $products->quantity = $request->quantity;
       if( $products->quantity>0){

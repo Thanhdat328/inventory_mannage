@@ -22,7 +22,7 @@ class CategoriesController extends Controller
 
           ]);
           Category::create($request->all());
-          return redirect()->route('category');
+          return redirect()->route('category')->with('success', 'category has been created');
 
     }
     public function index()
