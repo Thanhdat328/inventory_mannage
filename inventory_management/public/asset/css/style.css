@@ -1,0 +1,121 @@
+.btn-primary
+{
+    color: green
+}
+.form-check{
+    color:green
+}
+.btn-link{
+    color: green;
+    text-decoration: none;
+}
+.card{
+    background: rgb(255, 255, 255);
+    border-radius: 0;
+    padding-bottom: 50px;
+    margin-bottom: 100px;
+    border: solid 1px rgb(20, 68, 20);
+}
+
+.card-header{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    border: 0;
+    display: flex;
+    background: none;
+}
+
+.hd-login{
+    background-color: rgba(26, 177, 136, 1) ;
+    padding: 5px 80px;
+    color: aliceblue;
+    margin: 0 auto;
+}
+.hd-regis{
+    background-color: rgba(26, 177, 136, 1) ;
+    color: aliceblue;
+    padding: 5px 80px;
+    margin: 0 auto;
+}
+.text-md-end{
+    color: rgb(0, 0, 0);
+    padding: 0;
+    padding-top: 5px;
+}
+.form-control{
+    border-radius: 0;
+    background-color: rgb(237, 255, 249);
+    border: solid 1px rgb(125 142 131);
+}
+
+.btn-bg {
+    background-color: rgba(26, 177, 136, 1) ;
+}
+
+.bg-hd{
+    background-color: rgba(26, 177, 136, 1) ;
+}
+ul li a , li{
+    text-decoration: none;
+    list-style: none;
+    color: black;
+}
+
+ul li  {
+    transition: transform 0.3s ease;
+}
+
+ul li:hover{
+    transform: scale(1.1);
+}
+
+.menu-hv-1:hover{
+    color: white;
+}
+.menu-hv-2:hover{
+    color: rgba(26, 177, 136, 1) ;
+}
+
+.menu{
+    display: flex;
+}
+
+.menu-bar{
+    padding: 10px 20px;
+    border: 1px solid rgb(137, 137, 137);
+    margin-top: 5px;
+}
+.edit-btn{
+    background: none;
+    border: none;
+    color: #0d6efd;
+}
+.icon-size{
+    font-size: 24px;
+}
+
+.create-order-bg{
+    background: #003a92;
+}
+.icon-fix{
+    text-align: center;
+    font-size: 25px;
+    padding-top: 5px;
+}
+
+.frame-link{
+    border: 1px solid #a2a2a2;
+    border-radius: 3px;
+}
+
+.line-text{
+    padding-right: 100px;
+    padding-left: 0;
+    font-size: 15px;
+}
+a{
+    text-decoration: none;
+}
+
