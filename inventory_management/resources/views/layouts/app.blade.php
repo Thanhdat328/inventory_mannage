@@ -101,24 +101,53 @@
             </div>
         </nav>
 
-        <div id="menubar">
-        <!-- Menu Bar -->
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <ul class="menu">
-                            <li class="menu-bar bg-hd"><a class=" menu-hv-1" href="{{route('home')}}">Dashboard</a></li>
-                            <li class="menu-bar bg-light"><a class=" menu-hv-2" href="{{route('product')}}">Products</a></li>
-                            <li class="menu-bar bg-hd"><a class=" menu-hv-1" href="{{route('order_issue.create')}}">Order issue</a></li>
-                            <li class="menu-bar bg-light"><a class=" menu-hv-2" href="{{route('receiver.index')}}">Receiver</a></li>
-                            <li class="menu-bar bg-hd"><a class=" menu-hv-1" href="{{route('category')}}">Category</a></li>
-                            <li class="menu-bar bg-light"><a class=" menu-hv-2" href="{{route('report.index')}}">Report</a></li>
-                            <li class="menu-bar bg-hd"><a class="menu-hv-1" href="{{route('return_order.index')}}">Return order</a></li>
-                        </ul>
+
+
+        <header class="navbar navbar-expand-md d-print-none navbar-dark bg-hd shadow-sm">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+                    aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="{{ url('/') }}">
+                        Laravel
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <div class="d-none d-md-flex">
+                    </div>
+
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
+                            aria-label="Open user menu">
+                           
+                            <div class="d-none d-xl-block ps-2">
+                                <div>{{ Auth::user()->name }}</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu">
+                            <form action="{{ route('logout') }}" method="post">
+                                @csrf
+                                <button type="submit" class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="icon dropdown-item-icon icon-tabler icon-tabler-logout" width="24"
+                                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path
+                                            d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
+                                        <path d="M9 12h12l-3 -3" />
+                                        <path d="M18 15l3 -3" />
+                                    </svg>
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </header>
 
         <div class="container">
             <header class="navbar-expand-md">
@@ -176,8 +205,7 @@
 
 
                                 <li class="nav-item dropdown {{ request()->is('orders*') ? 'active' : null }}">
-                                    <a class="nav-link dropdown-toggle" href="{{route('order_issue.create')}}" data-bs-toggle="dropdown"
-                                        data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                    <a class="nav-link" href="{{route('order_issue.create')}}">
                                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                 class="icon icon-tabler icon-tabler-package-export" width="24"
@@ -201,8 +229,7 @@
 
 
                                 <li class="nav-item dropdown {{ request()->is('purchases*') ? 'active' : null }}">
-                                    <a class="nav-link dropdown-toggle" href="{{route('receiver.index')}}" data-bs-toggle="dropdown"
-                                        data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                    <a class="nav-link" href="{{route('receiver.index')}}">
                                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                 class="icon icon-tabler icon-tabler-package-import" width="24"
@@ -250,8 +277,7 @@
 
                                 <li
                                     class="nav-item dropdown {{ request()->is('suppliers*', 'customers*') ? 'active' : null }}">
-                                    <a class="nav-link dropdown-toggle" href="{{route('return_order.index')}}" data-bs-toggle="dropdown"
-                                        data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                    <a class="nav-link" href="{{route('return_order.index')}}">
                                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                 class="icon icon-tabler icon-tabler-layers-subtract" width="24"
@@ -294,8 +320,7 @@
     <script src="{{asset('asset/js/jquery-3.7.1.min.js')}}"></script>
 
     <script src="https://kit.fontawesome.com/f6dce9b617.js" crossorigin="anonymous"></script>
-
-    
+ 
 </body>
 
 </html>

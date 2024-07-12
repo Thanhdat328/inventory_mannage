@@ -45,8 +45,17 @@ Route::get('/', function () {
 
 });
 
-Auth::routes();
 
+Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect('/home');
+    }
+    return redirect('/login');
+});
+
+
+Auth::routes();
+Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/order/show/{id}', [HomeController::class, 'show'])->name('home.show');
 Route::put('/order/{id}/approve', [HomeController::class, 'approved'])->name('home.approved');
@@ -128,6 +137,6 @@ Route::prefix('admin')->group(function () {
     Route::put('/update/{id}', [AdminController::class, 'update'])->name('admin.update');
     Route::get('/view/{id}', [AdminController::class, 'view'])->name('admin.view');
 });
-
+});
 
 
