@@ -8,13 +8,14 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
-use App\Http\Controllers\ProductController;
 
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceiverController;
 use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\CustomAuthController;
 
+use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\OrderIssueController;
 use App\Http\Controllers\ReturnOrderCotroller;
 
@@ -66,13 +67,16 @@ Route::prefix('categores')->group(function(){
 });
 
 //CRUD receiver
-Route::get('receiver',[ReceiverController::class, 'index'])->name('receiver.index');
-Route::get('receiver/create',[ReceiverController::class, 'create'])->name('receiver.create');
-Route::post('receiver/store',[ReceiverController::class, 'store'])->name('receiver.store');
-Route::get('receiver/edit/{id}',[ReceiverController::class, 'edit'])->name('receiver.edit');
-Route::put('receiver/update/{id}',[ReceiverController::class, 'update'])->name('receiver.update');
-Route::delete('receiver/{id}',[ReceiverController::class, 'delete'])->name('receiver.delete');
-Route::get('receiver/view/{id}',[ReceiverController::class, 'view'])->name('receiver.view');
+Route::prefix('receiver')->group(function(){
+    Route::get('/',[ReceiverController::class, 'index'])->name('receiver.index');
+    Route::get('/create',[ReceiverController::class, 'create'])->name('receiver.create');
+    Route::post('/store',[ReceiverController::class, 'store'])->name('receiver.store');
+    Route::get('/edit/{id}',[ReceiverController::class, 'edit'])->name('receiver.edit');
+    Route::put('/update/{id}',[ReceiverController::class, 'update'])->name('receiver.update');
+    Route::delete('/{id}',[ReceiverController::class, 'delete'])->name('receiver.delete');
+    Route::get('/view/{id}',[ReceiverController::class, 'view'])->name('receiver.view');
+});
+
 
 //OrderIssue Function
 Route::get('order_issue', [OrderIssueController::class, 'index'])->name('order_issue.index');
@@ -94,21 +98,36 @@ Route::prefix('products')->group(function () {
 });
 
 //Report
-Route::get('report', [ReportController::class, 'index'])->name('report.index');
-Route::get('report/date', [ReportController::class, 'date_wise'])->name('report.date');
-Route::post('report/date', [ReportController::class, 'generate_date_wise_report'])->name('report.generate_date');
-Route::get('report/month', [ReportController::class, 'month_wise'])->name('report.month');
-Route::post('report/month', [ReportController::class, 'generate_month_wise_report'])->name('report.generate_month');
-
-Route::get('report/{id}', [ReportController::class, 'report_details'])->name('report.report_detail');
-Route::get('report/{id}/edit', [ReportController::class, 'edit'])->name('report.edit');
-Route::post('report/{id}/edit', [ReportController::class, 'update'])->name('report.update');
+Route::prefix('report')->group(function () {
+    Route::get('/', [ReportController::class, 'index'])->name('report.index');
+    Route::get('/date', [ReportController::class, 'date_wise'])->name('report.date');
+    Route::post('/date', [ReportController::class, 'generate_date_wise_report'])->name('report.generate_date');
+    Route::get('/month', [ReportController::class, 'month_wise'])->name('report.month');
+    Route::post('/month', [ReportController::class, 'generate_month_wise_report'])->name('report.generate_month');
+    Route::get('/month/return', [ReportController::class, 'return_product_report'])->name('report.return_month');
+    Route::post('/month/return', [ReportController::class, 'generate_return_month_wise_report'])->name('report.generate_return_month');
+    Route::get('/{id}', [ReportController::class, 'report_details'])->name('report.report_detail');
+    Route::get('/{id}/edit', [ReportController::class, 'edit'])->name('report.edit');
+    Route::post('/{id}/edit', [ReportController::class, 'update'])->name('report.update');
+});
 
 //Return order
-Route::get('return_order', [ReturnOrderCotroller::class, 'index'])->name('return_order.index');
-Route::get('return_order/{id}', [ReturnOrderCotroller::class, 'show'])->name('return_order.show');
-Route::put('return_order/{id}/return', [ReturnOrderCotroller::class, 'returnOrder'])->name('return_order.main');
-Route::get('return_order/{orderId}/{itemId}/editDamage/{id}', [ReturnOrderCotroller::class, 'editDamageView'])->name('return_order.edit_damage');
-Route::put('return_order/{orderId}/{productId}/updateDamage', [ReturnOrderCotroller::class, 'updateDamage'])->name('return_order.update_damage');
+Route::prefix('return_order')->group(function () {
+    Route::get('/', [ReturnOrderCotroller::class, 'index'])->name('return_order.index');
+    Route::get('{id}', [ReturnOrderCotroller::class, 'show'])->name('return_order.show');
+    Route::put('{id}/return', [ReturnOrderCotroller::class,'returnOrder'])->name('return_order.main');
+    Route::get('{orderId}/{itemId}/editDamage/{id}', [ReturnOrderCotroller::class, 'editDamageView'])->name('return_order.edit_damage');
+    Route::put('{orderId}/{productId}/updateDamage', [ReturnOrderCotroller::class, 'updateDamage'])->name('return_order.update_damage');
+});
+
+Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/add', [AdminController::class, 'create'])->name('admin.create');
+    Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
+    Route::get('/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');
+    Route::put('/update/{id}', [AdminController::class, 'update'])->name('admin.update');
+    Route::get('/view/{id}', [AdminController::class, 'view'])->name('admin.view');
+});
+
 
 

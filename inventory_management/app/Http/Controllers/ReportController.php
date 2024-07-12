@@ -16,6 +16,26 @@ class ReportController extends Controller
         return view('report.index');
     }
 
+    public function return_product_report()
+    {
+        return view('report.returnProductReport', ['orders' => '']);
+    }
+    public function generate_return_month_wise_report(Request $request)
+    {   
+        $request->validate(['month' => 'required|date']);
+        return view('report.returnProductReport', [
+            'orders' => Order::where('return_date', 'LIKE', '%' . $request->month . '%')
+                ->where('delete_flag', 1)
+                ->where(function ($query) {
+                    $query->where('user_id', Auth::user()->id)
+                            ->orWhere('user_id_owner', Auth::user()->id);
+                })
+                ->latest()
+                ->get(),
+
+        ]); 
+    }
+
     public function date_wise()
     {
         return view('report.dateWise', ['orders' => '']);
@@ -35,18 +55,35 @@ class ReportController extends Controller
     }
 
     public function generate_month_wise_report(Request $request)
-    {
+    {     
         $request->validate(['month' => "required|date"]);
         return view('report.monthWise', [
-            'orders' => Order::where('order_date', 'LIKE', '%' . $request->month . '%')->where('delete_flag', 0)->latest()->get(),
+            'orders' => Order::where('order_date', 'LIKE', '%' . $request->month . '%')
+                ->where('delete_flag', 0)
+                ->where('status', 'approved')
+                ->where(function ($query) {
+                    $query->where('user_id', Auth::user()->id)
+                        ->orWhere('user_id_owner', Auth::user()->id);
+                })
+                ->latest('order_date')
+                ->get(),
         ]);
     }
 
     public function report_details($id)
-    {
-        $order = Order::find($id);
-        return view('report.reportDetail', ['order' => $order]);
+    {    
+        try {
+            $order = Order::find($id);
+            if ($order->user_id == Auth::user()->id && $order->user_id_owner == Auth::user()->id) {
+                return view('report.reportDetail', ['order' => $order]);
+            } else {
+                return redirect()->route('home')->with('status', 'You are not authorized to view this report.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('home')->with('status', $e->getMessage());
+        }
     }
+
     public function update(Request $request, $id)
     {
 
@@ -70,11 +107,10 @@ class ReportController extends Controller
     //     $orders->status = 'N';
     //   }
 
-
+    
     $condition = $request->orderId;
     foreach ($condition as $key => $condition)
     {
-
         $order = OrderDetails::find($condition);
 
         $product = Product::find($order->product_id);
@@ -95,19 +131,10 @@ class ReportController extends Controller
             $order->quantity = $request->quantity[$key];
             $order->save();
         }
-
-
-
-
     }
-
-
-      /////
-
-
       return redirect()->route('report.date')->with('success', 'suwa sản phẩm thành công');
-
     }
+
     public function edit($id)
     {
 

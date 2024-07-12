@@ -12,14 +12,23 @@ class ReturnOrderCotroller extends Controller
 {
     public function index()
     {
-        $orders = Order::where('delete_flag', 0)->latest()->get();
+        $orders = Order::where('delete_flag', 0)->where('status', 'approved')->where('user_id', Auth::user()->id)->latest()->get();
         return view('return_order.index', ['orders' => $orders]);
     }
 
     public function show($id)
     {
-        $order = Order::where('id', $id)->latest('id')->first();
-        return view('return_order.show', ['order' => $order]);
+        try {
+            $order = Order::where('id', $id)->latest('id')->first();
+            if ($order->user_id == Auth::user()->id && $order->status == 'approved') {
+                return view('return_order.show', ['order' => $order]);
+            } else {
+                return redirect()->route('home')->with('status', 'You are not allowed to view this order');
+            }
+            
+        } catch (\Exception $e) {
+            return redirect()->route('home')->with('status', $e->getMessage());
+        }
     }
 
     public function returnOrder(Request $request, $id)
@@ -37,6 +46,7 @@ class ReturnOrderCotroller extends Controller
         }
         $order = Order::find($id);
         $order->delete_flag = true;
+        $order->return_date = now();
         $order->save();
         return redirect()->route('return_order.index');
     }
@@ -74,12 +84,17 @@ class ReturnOrderCotroller extends Controller
     }
 
     public function editDamageView(Request $request, $itemId, $orderId, $id)
-    {
-        $order = OrderDetails::where('order_id', $orderId)
-        ->where('product_id', $id)->where('id', $itemId)
-        ->first();
-        $product = Product::find($id);
-        return view('return_order.edit_damage', ['product' => $product, 'order' => $order]);
+    {   
+        try {
+            $order = OrderDetails::where('order_id', $orderId)
+            ->where('product_id', $id)->where('id', $itemId)
+            ->first();
+            $product = Product::find($id);
+            return view('return_order.edit_damage', ['product' => $product, 'order' => $order]);
+        } catch (\Exception $e) {
+            return redirect()->route('home')->with('status', $e->getMessage());
+        }
+        
     }
     
 }

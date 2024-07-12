@@ -6,15 +6,25 @@ use App\Models\Receiver;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class ReceiverController extends Controller
 {
     public function index()
     {
         $request_user = Auth::user();
-        return view('receiver.index', [
-            'receivers' => Receiver::Paginate(5), 'request_user' => $request_user
-        ]);
+        if ($request_user->role_as == 'admin') {
+            $receivers = Receiver::paginate(5);
+            
+            return view('receiver.index', [
+                'receivers' => $receivers,
+                'request_user' => $request_user
+            ]);
+        } else {
+            return redirect()->route('home')->with('status', 'Unauthorized access.');
+        }
+
     }
 
     public function create(Request $request)
@@ -46,12 +56,23 @@ class ReceiverController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $receiver = Receiver::find($id);
-        return view('receiver.edit', ['receiver' => $receiver]);
+        try{
+            $receiver = Receiver::find($id);
+            $request_user = Auth::user();
+            if ($request_user->role_as == 'admin' || $request_user->id == $receiver->id) {    
+                return view('receiver.edit', ['receiver' => $receiver]);
+            }
+            else{
+                return redirect()->route('home')->with('status', 'Unauthorized access.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('home')->with('status', $e->getMessage());
+        }
     }
 
     public function update(Request $request, $id)
     {
+        
         $request->validate([
 
             'name' =>'required|max:100',

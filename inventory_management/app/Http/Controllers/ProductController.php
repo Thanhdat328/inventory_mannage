@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -10,10 +11,11 @@ use Illuminate\Support\Facades\Auth;
 class ProductController extends Controller
 {
 
+  
+
     public function index()
     {
-        
-        $product = Product::all();
+        $product = Product::where('user_id', Auth::user()->id)->latest()->get();
         $category = Category::all();
 
         return view('product.index', compact('product'),compact('category'));
@@ -48,13 +50,20 @@ class ProductController extends Controller
     //edit product
 
     public function edit($id)
-    {
-
-        $product = Product::find($id);
-
-        $category = Category::all();
-
-      return view('product.edit', ['category' => $category, 'product' => $product]);
+    {   
+        try{
+          $category = Category::all();
+          $request_user = Auth::user();
+          $product = Product::find($id);
+          if ($request_user->role_as == 'admin' || $request_user->id == $product->user_id) {
+            return view('product.edit', ['category' => $category, 'product' => $product]);
+          } else {
+            return redirect()->route('home')->with('status', 'Unauthorized access.');
+          }
+        } catch (Exception $e) {
+          return redirect()->route('home')->with('status', $e->getMessage());
+          //return $e->getMessage();
+        }
     }
 
     public function update(Request $request, $id)

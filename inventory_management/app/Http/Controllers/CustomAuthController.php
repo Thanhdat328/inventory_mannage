@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Session;
 
 class CustomAuthController extends Controller
 {
-
-
     public function logout(Request $request)
     {
         Auth::logout();
