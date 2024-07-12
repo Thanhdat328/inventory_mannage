@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="row row-cards">
+            <div class="row ">
                 <div class="col-sm-6 col-lg-3">
                     <div class="card card-sm">
                         <div class="card-body">
@@ -186,7 +186,8 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>       
     </div>
 </div>
+
 @endsection
