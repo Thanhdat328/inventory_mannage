@@ -1,6 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="page-header d-print-none pb-5">
+    <div class="container">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    Overview
+                </div>
+                <h2 class="page-title">
+                    Dashboard
+                </h2>
+            </div>
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                <a href="{{ route('order_issue.create') }}" class="btn btn-primary d-none d-sm-inline-block">
+                          
+                            Create new order
+                        </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12">
@@ -35,7 +58,7 @@
                                         {{ $products }} Products
                                     </div>
                                     <div class="text-muted">
-                                        {{ $categories }} categories
+                                        {{ $categoryCounts }} categories
                                     </div>
                                 </div>
                             </div>
@@ -63,10 +86,10 @@
                                 </div>
                                 <div class="col">
                                     <div class="font-weight-medium">
-                                        {{ $order_returns }} Orders
+                                        {{ $order_pendings }} Orders
                                     </div>
                                     <div class="text-muted">
-                                        {{ $order_month_reports }} shipped
+                                        {{ $order_date_reports }} shipped
                                     </div>
                                 </div>
                             </div>
@@ -127,10 +150,10 @@
                                 </div>
                                 <div class="col">
                                     <div class="font-weight-medium">
-                                        {{-- $quotations --}} Quotations
+                                        {{ $order_month_reports }} Report
                                     </div>
                                     <div class="text-muted">
-                                        {{-- $todayQuotations --}} today
+                                        {{ $order_pendings}} today
                                     </div>
                                 </div>
                             </div>
@@ -180,9 +203,13 @@
                                     <tr class="text-center">
                                         <td colspan="10">No Record Found!</td>
                                     </tr>
-                                @endforelse
+                                @endforelse 
                             </tbody>
+                            <tfoot>
+                           
+                            </tfoot>
                         </table>
+                        {{ $orders->links() }}
                     </div>
                 </div>
             </div>

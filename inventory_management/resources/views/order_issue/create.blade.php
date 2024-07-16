@@ -3,13 +3,11 @@
 @section('content')
 <div class="page-body">
     <div class="container-xl">
-
         @if (session('error'))
             <div class="alert alert-danger" role="alert">
                 {{ session('error') }}
             </div>
         @endif
-
         <div class="row row-cards">
             <div class="col-lg-7">
                 <div class="card">
@@ -75,7 +73,7 @@
                                             <th scope="col">Name</th>
                                             <th scope="col" class="text-center">Product code</th>
                                             <th scope="col" class="text-center">Quantity</th>
-                                            <th scope="col" class="text-center">Action</th>
+                                            <!-- <th scope="col" class="text-center">Action</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -87,6 +85,9 @@
                         <div class="card-footer text-end">
                             <button type="submit" class="btn btn-success add-list mx-1" id="sendButton" disabled>
                                 send
+                            </button>
+                            <button type="button" class="btn btn-danger add-list mx-1" id="deleteAllButton" disabled>
+                                Delete All
                             </button>
                         </div>
                     </form>
@@ -144,7 +145,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         var i = 0;
@@ -157,7 +158,7 @@
             var product_id = $(this).closest('tr').find('input[name="product_id[0][product_id]"]').val();
             var product_name = $(this).closest('tr').find('input[name="product_name[0][product_name]"]').val();
 
-            $("#dynamicAddRemove").append('<tr><td><input type="" name="product_name[' + i + '][product_name]" value="' + product_name + '"></td><td><input type="" name="product_id[' + i + '][product_id]" value="' + product_id + '"></td><td><input type="number" name="addMoreInputFields[' + i + '][quantity]" class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>');
+            $("#dynamicAddRemove").append('<tr><td><input type="" name="product_name[' + i + '][product_name]" value="' + product_name + '"></td><td><input type="" name="product_id[' + i + '][product_id]" value="' + product_id + '"></td><td><input type="number" name="addMoreInputFields[' + i + '][quantity]" class="form-control" /></td>');//<td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>');
 
             console.log(product_id);
             console.log(product_name);
@@ -166,33 +167,39 @@
             checkTableRows(); 
         });
 
-        $(document).on('click', '.remove-input-field', function () {   
-                   
+        $("#deleteAllButton").click(function () {
+            location.reload();
+        });
+
+        $(document).on('click', '.remove-input-field', function () {
             $(this).closest('tr').remove();
             checkTableRows();
-
-            var product_id = $(this).closest('tr').find('input[name="product_id[0][product_id]"]').val();
-            $("button.dynamic-ar").each(function () {
-                i--
-                
-                if ($(this).closest('tr').find('input[name="product_id['+i+'][product_id]"]').val() === product_id) {
-                    $(this).attr("disabled", false);   
-                }
-            });
+            --i
             
-            console.log(i);
-            console.log(product_id);
-           
+            var product_id = $(this).closest('tr').find('input[name^="product_id"]').val();
+
+            // Enable the corresponding .dynamic-ar button
+            $("button.dynamic-ar").each(function () {
+                var buttonProductID = $(this).closest('tr').find('input[name^="product_id"]').val();
+                if (buttonProductID === product_id) {
+                    $(this).attr("disabled", false);
+                    return false; // Exit the loop once found and enabled
+                }
+                
+            });
         });
 
         function checkTableRows() {
             var rowCount = $('#dynamicAddRemove tbody tr').length;
             if (rowCount > 0) {
                 $('#sendButton').prop('disabled', false);
+                $('#deleteAllButton').prop('disabled', false);
             } else {
                 $('#sendButton').prop('disabled', true);
+                $('#deleteAllButton').prop('disabled', true);
             }
         }
     });
+    
 </script>
 @endsection

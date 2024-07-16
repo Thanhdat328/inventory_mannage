@@ -69,6 +69,14 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
 
+            Receiver::create([
+                'user_id' => $user->id,
+                'address' => $data['address'],
+                'phone' => $data['phone'],
+                'city' => $data['city'],
+                'country' => $data['country'],
+                'zip_code' => $data['zip_code'],
+            ])
         ]);
     }
 }

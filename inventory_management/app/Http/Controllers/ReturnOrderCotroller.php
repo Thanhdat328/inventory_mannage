@@ -32,23 +32,30 @@ class ReturnOrderCotroller extends Controller
     }
 
     public function returnOrder(Request $request, $id)
-    {
-        $request->validate([
-            'productId.*' => 'required',
-            'quantity.*' => 'required',
-        ]);
-        $condition = $request->productId;
-        foreach ($condition as $key => $condition)
-        {
-            $product = Product::find($condition);
-            $product->quantity = $product->quantity + $request->quantity[$key];
-            $product->save();
+    {   
+        try {
+            $request->validate([
+                'productId.*' => 'required',
+                'quantity.*' => 'required',
+            ]);
+
+            $order = Order::find($id);
+            $order->delete_flag = true;
+            $order->return_date = now();
+            $order->save();
+            $condition = $request->productId;
+            foreach ($condition as $key => $condition)
+            {
+                $product = Product::find($condition);
+                $product->quantity = $product->quantity + $request->quantity[$key];
+                $product->save();
+            }
+            
+            return redirect()->route('return_order.index');
+        } catch (\Exception $e) {
+            return redirect()->route('home')->with('status', $e->getMessage());
         }
-        $order = Order::find($id);
-        $order->delete_flag = true;
-        $order->return_date = now();
-        $order->save();
-        return redirect()->route('return_order.index');
+        
     }
 
     public function updateDamage(Request $request,  $orderDetailId, $productId)
