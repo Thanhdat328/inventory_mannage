@@ -39,18 +39,18 @@
                             <tbody>
                                 @foreach($categories as $category)
                                     <tr>
-                                        <td class="align-middle text-center" style="width: 10%">{{$loop->index}}</td>
+                                        <td class="align-middle text-center">{{$loop->index}}</td>
                                         <td class="align-middle text-center">{{$category->name}}</td>
                                         <td class="align-middle text-center d-none d-sm-table-cell">{{ $category->active? __('No') : __('Yes') }}</td>
                                         <td class="align-middle text-center d-none d-sm-table-cell">{{ $category->updated_at->diffForHumans() }}</td>
-                                        <td class="align-middle text-center " style="width: 25%">
-                                            <a class="btn-icon" href="{{route('category.show',$category->id)}}"><i class="fa-solid fa-eye"></i></a>
-                                            <a class="btn-icon" href="{{route('category.edit', $category->id)}}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil-alt"></i></a>
-                                            <form class="btn-icon" method="POST" action="{{route('category.destroy',$category->id)}}">
+                                        <td class="d-flex">
+                                            <a class="btn btn-outline-primary view-btn ms-2-icon" href="{{route('category.show',$category->id)}}">View</a>
+                                            <a class="btn btn-outline-warning view-btn ms-2-icon" href="{{route('category.edit', $category->id)}}" class="btn btn-primary btn-sm">Edit</a>
+                                            <form method="POST" action="{{route('category.destroy',$category->id)}}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button  onclick="return confirm('Are you sure you want to delete this category?')">
-                                                    <i class="fa-regular fa-circle-xmark"></i>
+                                                <button class="btn btn-outline-danger view-btn ms-2-icon" onclick="return confirm('Are you sure you want to delete this category?')">
+                                                    Delete
                                                 </button>
 
                                             </form>
@@ -59,74 +59,11 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $categories->links()}}
+                        {{ $categories->links() }}
                     </div>
                 </div>
             </div>
         @endif
     </div>
 
-
-
-
-
-
-
-
-
-
-<div class="container">
-
-
-
-    <a href="categores/add"><i class="fa-solid fa-plus"></i> </a>
-
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th style="width: 50px">ID</th>
-                <th>Name</th>
-                <th>Active</th>
-                <th>Update</th>
-                <th style="width: 100px">&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @foreach($categories as $category) <!-- Sửa $category thành $categories -->
-
-            <tr>
-                <td>{{$category->id}}</td>
-                <td>
-                    {{ $category->name}}
-                </td>
-                <td> </td>
-                <td>
-                    <th>  <a href="{{route('category.edit',$category->id)}}"><i class="fa-regular fa-pen-to-square"></i></a>
-                    </th>
-                    <th><form method="POST" action="{{route('category.destroy',$category->id)}}">
-
-                        @csrf
-                        @method('DELETE')
-                        <button onclick="return confirm('Are you sure you want to delete this category?')">
-                            <i class="fa-regular fa-circle-xmark"></i>
-                        </button>
-
-                    </form></th>
-                    <th><a href="{{route('category.show',$category->id)}}"><i class="fa-solid fa-eye"></i></a></th>
-
-
-
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    
-
-    {{ $categories->links()}}
-
-</div>
 @endsection

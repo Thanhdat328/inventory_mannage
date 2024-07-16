@@ -26,11 +26,17 @@ class CategoriesController extends Controller
   //
   public function store(Request $request)
   {
-    $request->validate([
-      'name' => 'required|max:255',
+    try{
+      $request->validate([
+      
+        'name' => 'required|max:255',
     ]);
-    Category::create($request->all());
-    return redirect()->route('category')->with('success', 'category has been created');
+      Category::create($request->name);
+      return redirect()->route('category')->with('success', 'category has been created');
+    }catch(Exception $e){
+      return redirect()->route('category')->with('error', $e->getMessage());
+    }
+    
   }
 
   public function index()
