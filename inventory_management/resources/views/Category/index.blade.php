@@ -13,7 +13,7 @@
                         <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                     </div>
                 @endif
-                <div class="card">
+                <div class="card ball">
                     <div class="card-header">
                         <div>
                             <strong class="card-title">
@@ -49,7 +49,7 @@
                                             <form class="btn-icon" method="POST" action="{{route('category.destroy',$category->id)}}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button  onclick="return confirm('Are you sure you want to delete this category?')">
+                                                <button  onclick="return confirm('Are you sure you want to delete this category?')" class="delete">
                                                     <i class="fa-regular fa-circle-xmark"></i>
                                                 </button>
 
@@ -65,4 +65,14 @@
             </div>
         @endif
     </div>
+
+
+
+
+
+
+
+
+
+
 @endsection

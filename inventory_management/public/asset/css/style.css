@@ -122,4 +122,11 @@ ul li:hover{
     top: -15px;
     right: -15px;
 }
-
+.delete{
+    border: none;
+    background: #f6f8fb;
+    color: red;
+}
+.page-body .ball{
+    box-shadow: 3px 5px 5px gray;
+}
