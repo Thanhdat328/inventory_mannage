@@ -43,14 +43,14 @@
                                         <td class="align-middle text-center">{{$category->name}}</td>
                                         <td class="align-middle text-center d-none d-sm-table-cell">{{ $category->active? __('No') : __('Yes') }}</td>
                                         <td class="align-middle text-center d-none d-sm-table-cell">{{ $category->updated_at->diffForHumans() }}</td>
-                                        <td class="align-middle text-center " style="width: 25%">
-                                            <a class="btn-icon" href="{{route('category.show',$category->id)}}"><i class="fa-solid fa-eye"></i></a>
-                                            <a class="btn-icon" href="{{route('category.edit', $category->id)}}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil-alt"></i></a>
+                                        <td class="align-middle text-center d-flex " >
+                                            <a class="btn-icon me-2" href="{{route('category.show',$category->id)}}"><i class="fa-solid fa-eye"></i></a>
+                                            <a class="btn-icon me-2" href="{{route('category.edit', $category->id)}}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil-alt"></i></a>
                                             <form class="btn-icon" method="POST" action="{{route('category.destroy',$category->id)}}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button  onclick="return confirm('Are you sure you want to delete this category?')" class="delete">
-                                                    <i class="fa-regular fa-circle-xmark"></i>
+                                                    <i class="fa-regular fa-circle-xmark delete"></i>
                                                 </button>
 
                                             </form>
