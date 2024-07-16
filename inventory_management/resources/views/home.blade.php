@@ -1,63 +1,168 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-11">
-            <div class="">
-                <button type="button" class="btn create-order-bg text-white text-end"><i class="fa-solid fa-plus"></i> Create New Order</button>
-
-                <div class="group-order menu mt-3">
-                    <a href="{{route('report.index')}}" class="me-5">
-                        <div class="gr-mini">
-                            <div class="row frame-link">
-                                <div class="col-md-4 icon-fix text-primary"><i class="fa-solid fa-box"></i></div>
-                                <div class="col-md-8 line-text">
-                                    <span class="text-dark">Products</span> <br>
-                                    <span class="text-secondary">categories</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="http://" class="me-5">
-                        <div class="gr-mini">
-                            <div class="row frame-link">
-                                <div class="col-md-4 icon-fix text-success"><i class="fa-solid fa-cart-shopping"></i></div>
-                                <div class="col-md-8 line-text">
-                                    <span class="text-dark">Orders</span> <br>
-                                    <span class="text-secondary">shipped</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="http://" class="me-5">
-                        <div class="gr-mini">
-                            <div class="row frame-link">
-                                <div class="col-md-4 icon-fix text-info"><i class="fa-solid fa-truck-fast"></i></div>
-                                <div class="col-md-8 line-text">
-                                    <span class="text-dark">Purchases</span> <br>
-                                    <span class="text-secondary">today</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="http://">
-                        <div class="gr-mini">
-                            <div class="row frame-link">
-                                <div class="col-md-4 icon-fix text-primary"><i class="fa-regular fa-file-image"></i></div>
-                                <div class="col-md-8 line-text">
-                                    <span class="text-dark">Quotations</span> <br>
-                                    <span class="text-secondary">today</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-
-
-
+<div class="page-header d-print-none pb-5">
+    <div class="container">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    Overview
+                </div>
+                <h2 class="page-title">
+                    Dashboard
+                </h2>
+            </div>
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                <a href="{{ route('order_issue.create') }}" class="btn btn-primary d-none d-sm-inline-block">
+                          
+                            Create new order
+                        </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="row ">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span
+                                        class="bg-primary text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-packages" width="24"
+                                            height="24" viewBox="0 0 24 24" stroke-width="2"
+                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M7 16.5l-5 -3l5 -3l5 3v5.5l-5 3z" />
+                                            <path d="M2 13.5v5.5l5 3" />
+                                            <path d="M7 16.545l5 -3.03" />
+                                            <path d="M17 16.5l-5 -3l5 -3l5 3v5.5l-5 3z" />
+                                            <path d="M12 19l5 3" />
+                                            <path d="M17 16.5l5 -3" />
+                                            <path d="M12 13.5v-5.5l-5 -3l5 -3l5 3v5.5" />
+                                            <path d="M7 5.03v5.455" />
+                                            <path d="M12 8l5 -3" />
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        {{ $products }} Products
+                                    </div>
+                                    <div class="text-muted">
+                                        {{ $categoryCounts }} categories
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span
+                                        class="bg-green text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/shopping-cart -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                            height="24" viewBox="0 0 24 24" stroke-width="2"
+                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                            <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                            <path d="M17 17h-11v-14h-2" />
+                                            <path d="M6 5l14 1l-1 7h-13" />
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        {{ $order_pendings }} Orders
+                                    </div>
+                                    <div class="text-muted">
+                                        {{ $order_date_reports }} shipped
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span
+                                        class="bg-twitter text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-truck-delivery" width="24"
+                                            height="24" viewBox="0 0 24 24" stroke-width="2"
+                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                            <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                            <path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" />
+                                            <path d="M3 9l4 0" />
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        {{-- $purchases --}} Purchases
+                                    </div>
+                                    <div class="text-muted">
+                                        {{-- $todayPurchases --}} today
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span
+                                        class="bg-facebook text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-files" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M15 3v4a1 1 0 0 0 1 1h4" />
+                                            <path
+                                                d="M18 17h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h4l5 5v7a2 2 0 0 1 -2 2z" />
+                                            <path
+                                                d="M16 17v2a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h2" />
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        {{ $order_month_reports }} Report
+                                    </div>
+                                    <div class="text-muted">
+                                        {{ $order_pendings}} today
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+</div>
+
 @endsection

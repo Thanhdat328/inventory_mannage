@@ -10,6 +10,7 @@ use App\Models\OrderDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class OrderIssueController extends Controller
 {
     public function index()
@@ -23,97 +24,77 @@ class OrderIssueController extends Controller
         $receivers = Receiver::latest()->get();
         $orders = Order::orderBy('order_date','DESC')->first();;
         return view('order_issue.create', ['products'=>$products, 'receivers'=>$receivers, 'orders'=>$orders]);
-        
     }
     
     public function addProductToOrder(Request $request)
-    {
+    {   
+        try{
+            $numberOfItems = count($request->addMoreInputFields);
+            $product = Product::find($request->product_id);
 
-        $product = Product::find($request->product_id);
+            $order = new Order();
+            $order->name = $request->input('order_name');
+            $order->user_id = Auth::user()->id;
+            $order->receiver_id = $request->input('receiver_id');
+            $order->order_date = now(); 
 
-        $order = new Order();
-
-        $order->name = $request->input('order_name');
-        $order->user_id = Auth::user()->id;
-        $order->receiver_id = $request->input('receiver_id');
-        $order->order_date = date('Y-m-d H:i:s');
-        $order->save();
-
-
-        $request->validate([
-            'addMoreInputFields.*.quantity' => 'required',
-            'order_name' => 'required|max:50'
-
-        ]);
-   
-        $numberOfItems = count($request->addMoreInputFields);
-        for ($i = 1; $i < $numberOfItems; $i++) {
-            $value = $request->addMoreInputFields[$i];
-            $id1 = $request->product_id[$i];
-            OrderDetails::create([
-                'order_id' => $order->id,
-                'product_id' => $id1['product_id'],
-                'quantity' => $value['quantity'],
-                'issue_date' => date('Y-m-d H:i:s'),
-                'issue_starus' => 'Y',
+            $check = false;
+            for($i= 1; $i <= $numberOfItems; $i++) {
+                $id1 = $request->product_id[$i];
+                $products = Product::find($id1['product_id']);
+                if ($products->user_id != Auth::user()->id) {
+                    $order->status = 'pending';
+                    $order->user_id_owner = $products->user_id;
+                    $order->save();
+                    $check = true;
+                }  
+            }
+            if (!$check) {
+                $order->status = 'approved';
+                $order->user_id_owner = Auth::user()->id;
+                $order->save();
+            }
+            $request->validate([
+                'receiver_id' => 'required',
+                'addMoreInputFields.*.quantity' => 'required|max:' . intval($products->quantity),
+                'order_name' => 'required|max:50',
             ]);
-            $products = Product::find($id1['product_id']);
             
+            $numberOfItems = count($request->addMoreInputFields);
+            for ($i = 1; $i <= $numberOfItems; $i++) {
+                $value = $request->addMoreInputFields[$i];
+                $id1 = $request->product_id[$i];
 
-            if($value['quantity'] > $products->quantity)
-            {
-                return redirect()->back()->with("error","Quantity is not enough");
-            }
-            else{
-                $products->quantity = $products->quantity - $value['quantity'];
-            }
+                $products = Product::find($id1['product_id']);
 
-            if($products->quantity > 0){
-                $products->status = 'Y';
-                $products->save();
-            }
-            else{
-                $products->status = 'N';
-                $products->save();
+                if ($value['quantity'] > $products->quantity) {
+                    return redirect()->back()->with("error", "Quantity is not enough");
+                } else {
+                    $products->quantity = $products->quantity - $value['quantity'];
+                }
 
-            } 
+                if ($products->quantity > 0) {
+                    $products->status = 'Y';
+                    $products->save();
+                } else {
+                    $products->status = 'N';
+                    $products->save();
+                }
+                
+
+                OrderDetails::create([
+                    'order_id' => $order->id,
+                    'product_id' => $id1['product_id'],
+                    'quantity' => $value['quantity'],
+                    'issue_date' => now(), 
+                    'issue_status' => 'Y', 
+                ]);
+            
+            }
+            return redirect()->back()->with("success", "Order added successfully");
         }
-        return redirect()->back()->with("success","Order added successfully");
-
-    }
-
-    public function StoreProductOrder(Request $request) 
-    {
-        $this->validate($request, [
-            'product_id' =>'required',
-            'quantity' =>'required',
-            'user_id' =>'required',
-           
-        ]);
-
-        $order = new Order();
-        $order->product_id = $request->product_id;
-        $order->quantity = $request->quantity;
-        $order->receiver_id = Auth::user()->id;
-        $order->user_id = $request->user_id;
-        $order->order_date = date('Y-m-d H:i:s');
-        $order->save();
-
-        //Update quantity for product
-        $product = new Product();
-        $product = Product::find($request->product_id);
-        $product->quantity = $product->quantity - $request->quantity;
-        if($product->quantity>0) {
-            $product->status = 'Y';
-            $product->save();
-        }else {
-            $product->status = 'N';
-            $product->save();
+        catch(\Exception $e){
+            return redirect()->route('home')->with('error', 'error_message: '.$e->getMessage());
         }
-        
-
-        return redirect()->route('order_issue.create');
     }
-
-    
 }

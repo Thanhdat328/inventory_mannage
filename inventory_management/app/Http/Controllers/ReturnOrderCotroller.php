@@ -12,52 +12,50 @@ class ReturnOrderCotroller extends Controller
 {
     public function index()
     {
-        $orders = Order::latest()->get();
+        $orders = Order::where('delete_flag', 0)->where('status', 'approved')->where('user_id', Auth::user()->id)->latest()->get();
         return view('return_order.index', ['orders' => $orders]);
     }
 
     public function show($id)
     {
-        $order = Order::where('id', $id)->latest('id')->first();
-        return view('return_order.show', ['order' => $order]);
+        try {
+            $order = Order::where('id', $id)->latest('id')->first();
+            if ($order->user_id == Auth::user()->id && $order->status == 'approved') {
+                return view('return_order.show', ['order' => $order]);
+            } else {
+                return redirect()->route('home')->with('status', 'You are not allowed to view this order');
+            }
+            
+        } catch (\Exception $e) {
+            return redirect()->route('home')->with('status', $e->getMessage());
+        }
     }
 
     public function returnOrder(Request $request, $id)
-    {
-        $request->validate([
-            'productId.*' => 'required',
-            'quantity.*' => 'required',
-        ]);
-        $condition = $request->productId;
-        foreach ($condition as $key => $condition)
-        {
-            $product = Product::find($condition);
-            $product->quantity = $product->quantity + $request->quantity[$key];
-            $product->save();
-        }
-        $order = Order::find($id);
-        $order->delete();
-        return redirect()->route('return_order.index');
-    }
+    {   
+        try {
+            $request->validate([
+                'productId.*' => 'required',
+                'quantity.*' => 'required',
+            ]);
 
-    public function returnOrderDetails(Request $request, $id)
-    { 
-        $request->validate([
-            'productId.*' => 'required',
-            'quantity.*' => 'required',
-        ]);
-        $condition = $request->productId;
-        foreach ($condition as $key => $condition)
-        {
-            $product = Product::find($conditon);
-            $product->quantity = $product->quantity + $request->quantity[$key];
-            $product->save();
+            $order = Order::find($id);
+            $order->delete_flag = true;
+            $order->return_date = now();
+            $order->save();
+            $condition = $request->productId;
+            foreach ($condition as $key => $condition)
+            {
+                $product = Product::find($condition);
+                $product->quantity = $product->quantity + $request->quantity[$key];
+                $product->save();
+            }
+            
+            return redirect()->route('return_order.index');
+        } catch (\Exception $e) {
+            return redirect()->route('home')->with('status', $e->getMessage());
         }
-        $order = Order::find($id);
-        // $order->status = "D";
-        // $order->save();
-        $order->delete();
-        return redirect()->routte('return_order.index');
+        
     }
 
     public function updateDamage(Request $request,  $orderDetailId, $productId)
@@ -93,12 +91,17 @@ class ReturnOrderCotroller extends Controller
     }
 
     public function editDamageView(Request $request, $itemId, $orderId, $id)
-    {
-        $order = OrderDetails::where('order_id', $orderId)
-        ->where('product_id', $id)->where('id', $itemId)
-        ->first();
-        $product = Product::find($id);
-        return view('return_order.edit_damage', ['product' => $product, 'order' => $order]);
+    {   
+        try {
+            $order = OrderDetails::where('order_id', $orderId)
+            ->where('product_id', $id)->where('id', $itemId)
+            ->first();
+            $product = Product::find($id);
+            return view('return_order.edit_damage', ['product' => $product, 'order' => $order]);
+        } catch (\Exception $e) {
+            return redirect()->route('home')->with('status', $e->getMessage());
+        }
+        
     }
     
 }

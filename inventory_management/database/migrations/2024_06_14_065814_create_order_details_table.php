@@ -17,10 +17,10 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
             $table->timestamp('issue_date');
-            $table->timestamp('return_date')->nullable();
-            $table->string('issue_starus')->nullable();
-            $table->timestamp('return_day')->nullable();
-           
+            // $table->timestamp('return_date')->nullable();
+            // $table->string('issue_starus')->nullable();
+            // $table->timestamp('return_day')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +29,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('order_details', function (Blueprint $table) {
+            $table->dropForeign(['order_id']);
+            $table->dropForeign(['product_id']);
+        });
         Schema::dropIfExists('order_details');
     }
 };

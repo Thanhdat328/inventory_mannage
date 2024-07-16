@@ -45,13 +45,15 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center">Item</th>
+                                                <th class="text-center">Category</th>
                                                 <th class="text-center">Quantity</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($order->details as $item)
                                             <tr>
-                                                <td class="text-center">{{ $item->product->name }}</td>                                   
+                                                <td class="text-center">{{ $item->product->name }}</td>
+                                                <td class="text-center">{{ $item->product->category->name }}</td>                                   
                                                 <td class="text-center">{{ $item->quantity }}</td>                                       
                                             </tr>
                                             @endforeach                                   
@@ -60,20 +62,76 @@
                                 </div>
                             </div>
                             <div class="invoice-btn-section clearfix d-print-none">
-                                <a href="{{ url()->previous() }}" class="btn btn-warning">
+                                <a href="{{ url()->previous() }}" class="btn btn-lg btn-back">
                                     {{ __('Back to previous') }}
                                 </a>
 
-                                <button type="button" class="btn btn-primary" onclick="window.print()" data-bs-toggle="modal" data-bs-target="#modal">
+                                <button type="button" class="btn btn-lg btn-print" onclick="window.print()" data-bs-toggle="modal" data-bs-target="#modal">
                                 Print
                                 </button>
+
+                                <a id="invoice_download_btn" class="btn btn-lg btn-download">
+                                    <i class="fa fa-download"></i>
+                                    Download Invoice
+                                </a>
                             </div>                   
                         </div>               
                     </div>
-                </div>
-                
+                </div>            
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="{{ asset('asset/invoice/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('asset/invoice/js/jspdf.min.js') }}"></script>
+        <script src="{{ asset('asset/invoice/js/html2canvas.js') }}"></script>
+        <script src="{{ asset('asset/invoice/js/app.js') }}"></script>
+        <script>
+           $(function () {
+                "use strict";
+
+                /**
+                 * Generating PDF from HTML using jQuery
+                 */
+                $(document).on("click", "#invoice_download_btn", function () {
+                    var contentWidth = $("#invoice_wrapper").width();
+                    var contentHeight = $("#invoice_wrapper").height();
+                    var topLeftMargin = 20;
+                    var pdfWidth = contentWidth + topLeftMargin * 2;
+                    var pdfHeight = pdfWidth * 1.5 + topLeftMargin * 2;
+                    var canvasImageWidth = contentWidth;
+                    var canvasImageHeight = contentHeight;
+                    var totalPDFPages = Math.ceil(contentHeight / pdfHeight) - 1;
+                    const dateNow = new Date().toLocaleString().split(",")[0];
+
+                    html2canvas($("#invoice_wrapper")[0], { allowTaint: true }).then(
+                        function (canvas) {
+                            canvas.getContext("2d");
+                            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+                            var pdf = new jsPDF("p", "pt", [pdfWidth, pdfHeight]);
+                            pdf.addImage(
+                                imgData,
+                                "JPG",
+                                topLeftMargin,
+                                topLeftMargin,
+                                canvasImageWidth,
+                                canvasImageHeight
+                            );
+                            for (var i = 1; i <= totalPDFPages; i++) {
+                                pdf.addPage(pdfWidth, pdfHeight);
+                                pdf.addImage(
+                                    imgData,
+                                    "JPG",
+                                    topLeftMargin,
+                                    -(pdfHeight * i) + topLeftMargin * 4,
+                                    canvasImageWidth,
+                                    canvasImageHeight
+                                );
+                            }
+                            pdf.save(`invoice-${dateNow}.pdf`);
+                        }
+                    );
+                });
+            });
+        </script>
     </body>
 </html>
+

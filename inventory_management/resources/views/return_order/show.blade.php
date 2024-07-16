@@ -65,7 +65,7 @@
                                                 {{ $item->product->name }}
                                             </td>
                                             <td class="align-middle text-center">
-                                                {{ $item->product->id }}--{{$item->id}}
+                                                {{ $item->product->id }}
                                             </td>
                                             <td  class="align-middle text-center">
                                                 <input type="text" value="{{ $item->quantity }}" name="quantity[]" readonly>

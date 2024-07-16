@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<link rel="stylesheet" href="{{asset('asset/css/style.css')}}">
+
 <div class="container">
     <form action="{{route('category.store')}}" method="post">
         @csrf
@@ -11,7 +11,7 @@
             <input type="text" class="form-control" id="name" name="name">
         </div>
         
-        <button class="btn-link" >ADD</button>
+        <button>ADD</button>
     </form>
 </div>
 @endsection
