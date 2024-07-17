@@ -6,7 +6,7 @@
     
 
 <div class="container">
-        <h1>Edit Damage for Product</h1>
+        <h1>Quantity of Damaged Products</h1>
         <p>Order ID: {{ $order->id }}-{{$order->order_id}}</p>
         <p>Product Name: {{ $product->name }}</p>
         {{$order->quantity}}
@@ -17,7 +17,7 @@
             <!-- Add your form fields here -->
             <div class="form-group">
                 <label for="damage_description">Damage Description</label>
-                <input type="text" class="form-control" name="quantityDamage" placeholder="Enter the number of damaged products">
+                <input type="text" class="form-control" name="quantityDamage" placeholder="Enter the quantity of damaged products.">
 
                 <!-- <textarea class="form-control" id="damage_description" name="damage_description"></textarea> -->
             </div>

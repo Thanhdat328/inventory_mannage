@@ -33,6 +33,10 @@ class HomeController extends Controller
         $categoryCounts = Product::where('user_id', Auth::user()->id)
         ->groupBy('category_id')->count();
         $order_returns = Order::where('user_id', Auth::user()->id)->where('delete_flag', 1)->where('status', 'approved')->count();
+        $order_return_date = Order::where('user_id', Auth::user()->id)
+        ->where('return_date', 'LIKE', '%'. $currentDate . '%')
+        ->where('delete_flag', 1)
+        ->where('status', 'approved')->count();
         $order_month_reports =  Order::where('order_date', 'LIKE', '%' . $currentMonth . '%')
         ->where('delete_flag', 0)
         ->where('status', 'approved')
@@ -60,6 +64,7 @@ class HomeController extends Controller
             'order_date_reports' => $order_date_reports,
             'order_rejected' => $order_rejected,
             'order_pendings' => $order_pendings,
+            'order_return_date' => $order_return_date,
         ]);
     }
     

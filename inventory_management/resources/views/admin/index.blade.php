@@ -16,15 +16,12 @@
             <tr>
                 <th>Name</th>
                 <th>Email</th>
-                
-
-
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($users as $user)
-                <tr>
+                <tr class="align-middle">
                     <td><strong>{{$user->name}}</strong></td>
                     <td>{{$user->email}}</td>
                     
@@ -37,6 +34,7 @@
             @endforeach
         </tbody>
     </table>
+    {{ $users->links()}}
 
     <div id="modal">
         <div id="modal-form">

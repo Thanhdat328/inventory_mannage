@@ -25,19 +25,18 @@ class CategoriesController extends Controller
 
   //
   public function store(Request $request)
-  {
-    try{
-      $request->validate([
-      
-        'name' => 'required|max:255',
-    ]);
-      Category::create($request->name);
-      return redirect()->route('category')->with('success', 'category has been created');
-    }catch(Exception $e){
-      return redirect()->route('category')->with('error', $e->getMessage());
+{
+    try {
+        $request->validate([
+            'name' => 'required|max:255',
+        ]);
+
+        Category::create(['name' => $request->name]);
+        return redirect()->route('category')->with('success', 'Category has been created');
+    } catch (Exception $e) {
+        return redirect()->route('category')->with('error', $e->getMessage());
     }
-    
-  }
+}
 
   public function index()
   {
@@ -48,23 +47,25 @@ class CategoriesController extends Controller
 
   ////////////////////////////////////////////////////////////// update category
   public function edit($id)
-  {
-    try{
-      $category = Category::find($id);
-      if (Auth::user()->role_as == 'admin' || Auth::user()->role_as == 'staff') {
-        return view('category.edit', compact('category'));
-      } else {
-        return redirect()->route('home')->with('You are not allowed to edit this category');
-      }
+{
+    try {
+        $category = Category::find($id);
+        
+        if (Auth::user()->role_as == 'admin' || Auth::user()->role_as == 'staff') {
+            return view('category.edit', compact('category'));
+        } else {
+            return redirect()->route('home')->with('error', 'You are not allowed to edit this category');
+        }
     } catch (\Exception $e) {
-      return redirect()->route('home')->with('status', 'error: '.$e->getMessage());
+        return redirect()->route('home')->with('error', 'Error: '.$e->getMessage());
     }
-  }
+}
+
 
   public function update(Request $request, $id)
   {
     $request->validate([
-      'name' => 'required|max:255',
+      'name' => 'required|min:3|max:255',
     ]);
     $category = Category::find($id);
     $category->update($request->all());

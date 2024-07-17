@@ -7,7 +7,7 @@
             <h2 class="admin-heading">All Receiver</h2>
         </div>
         <div class="offset-md-6 col-md-2">
-            <a class="add-new" href="{{ route('receiver.create') }}">Add receiver</a>
+            <a class="add-new btn btn-outline-primary" href="{{ route('receiver.create') }}">Add receiver</a>
         </div>
     </div>
    <div class="row">
@@ -43,7 +43,7 @@
             @endforeach
         </tbody>
     </table>
-
+    {{ $receivers->links()}}
     <div id="modal">
         <div id="modal-form">
             <table cellpadding="10px" width="100%">

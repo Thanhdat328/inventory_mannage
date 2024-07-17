@@ -3,7 +3,6 @@
 @section('content')
 
 <div class="container">
-<a href="">Return report</a>
     <div class="row">
         <div class="offset-md-4 col-md-4">
             <form class="yourform mb-5" action="{{ route('report.generate_return_month') }}" method="post">
@@ -31,13 +30,13 @@
                 </thead>
                 <tbody>
                     @forelse ($orders as $order)
-                        <tr>
+                        <tr class="align-middle">
                             <td>{{ $order->id }}</td>
                             <td>{{ $order->name }}</td>
                             <td>{{ $order->receiver->name}}</td>
                             <td>{{ $order->created_at->format('d, M, Y') }}</td>
                             <td>
-                                <a href="{{route('report.report_detail', $order->id)}}">View</a>
+                                <a class="btn btn-outline-primary" href="{{route('report.report_detail', $order->id)}}">View</a>
                             </td>
                         </tr>
                     @empty
@@ -47,6 +46,7 @@
                     @endforelse
                 </tbody>
             </table>
+            {{ $orders->links()}}
         @endif
     </div>
 </div>

@@ -15,10 +15,12 @@ class ProductController extends Controller
 
     public function index()
     {
-        $product = Product::where('user_id', Auth::user()->id)->latest()->get();
+        $products = Product::where('user_id', Auth::user()->id)->where('damaged' , 'N')->latest()->paginate(5);
         $category = Category::all();
 
-        return view('product.index', compact('product'),compact('category'));
+        $product_damageds = Product::where('user_id', Auth::user()->id)->where('damaged' , 'Y')->latest()->paginate(5);
+
+        return view('product.index', ['products' => $products, 'category' => $category, 'product_damageds' => $product_damageds]);
     }
 
     //add product
@@ -30,21 +32,24 @@ class ProductController extends Controller
     }
     public function store(Request $request)
     {
+      try {
         $request->validate([
-
             'name' => 'required|max:255',
-            'quantity'=>'required|numeric',
+            'quantity' => 'required|numeric',
             'category' => 'required'
+        ]);
 
-          ]);
-          $products = new Product();
-          $products->category_id=$request->input('category');
-          $products->user_id = Auth::user()->id;
-          $products->name = $request->name;
-          $products->quantity = $request->quantity;
-          $products->save();
+        $product = new Product();
+        $product->category_id = $request->input('category');
+        $product->user_id = Auth::user()->id;
+        $product->name = $request->name;
+        $product->quantity = $request->quantity;
+        $product->save();
 
-          return redirect()->route('product')->with('success', 'Thêm sản phẩm thành công');
+        return redirect()->route('product')->with('success', 'Product created successfully');
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors(['error' => 'There was an error adding the product: ' . $e->getMessage()]);
+    }
 
     }
     //edit product
@@ -70,25 +75,29 @@ class ProductController extends Controller
     {
       $request->validate([
         'name' => 'required|max:255',
-        'quantity'=>'required|numeric',
+        'quantity' => 'required|numeric',
+        'category' => 'required|exists:categories,id',
+    ]);
+    
+    $product = Product::find($id);
+    
+   
+    if ($product->name == $request->name && $product->quantity == $request->quantity && $product->category_id == $request->category) {
+        return redirect()->back()->withErrors(['error' => 'No changes made to the product.']);
+    }
 
-      ]);
-      
-      $products = Product::find($id);
-      $products->category_id=$request->input('category');
-      $products->user_id = $request->input('user_id');
-      $products->name = $request->name;
-      $products->quantity = $request->quantity;
-      if( $products->quantity>0){
-        $products->status = 'Y';
-      }
-      else{
-        $products->status = 'N';
-      }
-      $products->save();
 
-      return redirect()->route('product')->with('success', 'Thêm sản phẩm thành công');
+    $product->category_id = $request->input('category');
+    $product->user_id = $request->input('user_id');
+    $product->name = $request->name;
+    $product->quantity = $request->quantity;
+    
 
+    $product->status = $product->quantity > 0 ? 'Y' : 'N';
+    
+    $product->save();
+
+    return redirect()->route('product')->with('success', 'Product updated successfully.');
     }
     public function destroy($id)
     {

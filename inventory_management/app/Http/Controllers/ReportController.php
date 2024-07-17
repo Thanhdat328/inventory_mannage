@@ -31,7 +31,7 @@ class ReportController extends Controller
                             ->orWhere('user_id_owner', Auth::user()->id);
                 })
                 ->latest()
-                ->get(),
+                ->paginate(5),
 
         ]); 
     }
@@ -45,7 +45,15 @@ class ReportController extends Controller
     {
         $request->validate(['date' => "required|date"]);
         return view('report.dateWise', [
-            'orders' => Order::where('order_date', 'LIKE', '%' . $request->date . '%')->where('delete_flag', 0)->latest()->get()
+            'orders' => Order::where('order_date', 'LIKE', '%' . $request->date . '%')
+                ->where('delete_flag', 0)
+                ->where('status', 'approved')
+                ->where(function ($query) {
+                    $query->where('user_id', Auth::user()->id)
+                        ->orWhere('user_id_owner', Auth::user()->id);
+                })
+                ->latest('order_date')
+                ->paginate(5),
         ]);
     }
 
@@ -66,7 +74,7 @@ class ReportController extends Controller
                         ->orWhere('user_id_owner', Auth::user()->id);
                 })
                 ->latest('order_date')
-                ->get(),
+                ->paginate(5),
         ]);
     }
 
@@ -74,7 +82,7 @@ class ReportController extends Controller
     {    
         try {
             $order = Order::find($id);
-            if ($order->user_id == Auth::user()->id && $order->user_id_owner == Auth::user()->id) {
+            if ($order->user_id == Auth::user()->id || $order->user_id_owner == Auth::user()->id || Auth::user()->role_as == 'admin') {
                 return view('report.reportDetail', ['order' => $order]);
             } else {
                 return redirect()->route('home')->with('status', 'You are not authorized to view this report.');

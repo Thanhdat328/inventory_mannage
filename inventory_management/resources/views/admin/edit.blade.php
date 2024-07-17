@@ -3,6 +3,7 @@
 @section('content')
 
 <div class="container">
+    <h1>Update user</h1>
     <form action="{{route('admin.update', $user->id)}}" method="post">
         @csrf
         @method('put')
@@ -26,7 +27,7 @@
             </select>
         </div>
         
-        <button>ADD</button>
+        <button>Update</button>
     </form>
 </div>
     

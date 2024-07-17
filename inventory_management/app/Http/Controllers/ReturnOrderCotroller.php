@@ -12,7 +12,7 @@ class ReturnOrderCotroller extends Controller
 {
     public function index()
     {
-        $orders = Order::where('delete_flag', 0)->where('status', 'approved')->where('user_id', Auth::user()->id)->latest()->get();
+        $orders = Order::where('delete_flag', 0)->where('status', 'approved')->where('user_id', Auth::user()->id)->latest()->paginate(5);
         return view('return_order.index', ['orders' => $orders]);
     }
 
@@ -79,7 +79,7 @@ class ReturnOrderCotroller extends Controller
         $product = Product::find($productId);
 
         $product_damage = new Product();
-        $product_damage->user_id = Auth::user()->id;
+        $product_damage->user_id = $product->user_id;
         $product_damage->category_id = $product->category_id;
         $product_damage->name = $product->name;
         $product_damage->quantity = $request->quantityDamage;

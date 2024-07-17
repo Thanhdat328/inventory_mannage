@@ -41,7 +41,7 @@ class OrderIssueController extends Controller
                 $id1 = $request->product_id[$i];
                 $products = Product::find($id1['product_id']);
                 if ($products->user_id != Auth::user()->id) {
-                    $check = true; // Pending order
+                    $check = true; 
                 }
             }
             

@@ -158,7 +158,7 @@
             var product_id = $(this).closest('tr').find('input[name="product_id[0][product_id]"]').val();
             var product_name = $(this).closest('tr').find('input[name="product_name[0][product_name]"]').val();
 
-            $("#dynamicAddRemove").append('<tr><td><input type="" name="product_name[' + i + '][product_name]" value="' + product_name + '"></td><td><input type="" name="product_id[' + i + '][product_id]" value="' + product_id + '"></td><td><input type="number" name="addMoreInputFields[' + i + '][quantity]" class="form-control" /></td>');//<td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>');
+            $("#dynamicAddRemove").append('<tr><td><input readonly type="" name="product_name[' + i + '][product_name]" value="' + product_name + '"></td><td><input readonly type="" name="product_id[' + i + '][product_id]" value="' + product_id + '"></td><td><input min="1" required type="number" name="addMoreInputFields[' + i + '][quantity]" class="form-control" /></td>');//<td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>');
 
             console.log(product_id);
             console.log(product_name);

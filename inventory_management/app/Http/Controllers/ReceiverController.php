@@ -36,10 +36,10 @@ class ReceiverController extends Controller
     {
         $request->validate([
 
-            'name' =>'required|max:100|max:100',
-            'email' =>'required|max:100|max:100',
-            'phone' =>'required|max:100|max:100',
-            'address' =>'required|max:100|max:100',
+            'name' =>'required|max:255',
+            'email' =>'required|max:255',
+            'phone' =>'required|max:11|min:10',
+            'address' =>'required|max:255',
 
         ]);
 
@@ -77,7 +77,7 @@ class ReceiverController extends Controller
 
             'name' =>'required|max:100',
             'email' =>'required|max:100',
-            'phone' =>'required|max:100',
+            'phone' =>'required|max:11|min:10',
             'address' =>'required|max:100',
 
         ]);

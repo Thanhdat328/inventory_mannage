@@ -89,7 +89,7 @@
                                         {{ $order_pendings }} Orders
                                     </div>
                                     <div class="text-muted">
-                                        {{ $order_date_reports }} shipped
+                                        {{ $order_date_reports }} today
                                     </div>
                                 </div>
                             </div>
@@ -118,10 +118,10 @@
                                 </div>
                                 <div class="col">
                                     <div class="font-weight-medium">
-                                        {{-- $purchases --}} Purchases
+                                        {{ $order_returns }} Return
                                     </div>
                                     <div class="text-muted">
-                                        {{-- $todayPurchases --}} today
+                                        {{ $order_return_date }} today
                                     </div>
                                 </div>
                             </div>
@@ -163,9 +163,9 @@
             </div>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('User Request') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -174,7 +174,7 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    
                 </div>
 
                 <div class="appove-notification">
@@ -186,17 +186,18 @@
                                     <th>Order Name</th>
                                     <th>Receiver</th>
                                     <th>Order Date</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($orders as $order)
-                                    <tr>
+                                    <tr class="align-middle">
                                         <td>{{ $order->id }}</td>
                                         <td>{{ $order->name }}</td>
                                         <td>{{ $order->receiver->name}}</td>
                                         <td>{{ \Carbon\Carbon::parse($order->order_date)->format('d/m/Y') }}</td>
                                         <td>
-                                            <a href="{{route('home.show', $order->id)}}">View</a>
+                                            <a class="btn btn-outline-primary" href="{{route('home.show', $order->id)}}">View</a>
                                         </td>
                                     </tr>
                                 @empty
@@ -213,7 +214,47 @@
                     </div>
                 </div>
             </div>
-        </div>       
+        </div>  
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">{{ __('Rejected Request') }}</div>
+
+                <div class="appove-notification">
+                    <div class="container table-responsive">
+                        <table class="table table-bordered" id="dynamicAddRemove">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>S.No</th>
+                                    <th>Order Name</th>
+                                    <th>Receiver</th>
+                                    <th>Order Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($order_rejected as $order)
+                                    <tr>
+                                        <td>{{ $order->id }}</td>
+                                        <td>{{ $order->name }}</td>
+                                        <td>{{ $order->receiver->name}}</td>
+                                        <td>{{ \Carbon\Carbon::parse($order->order_date)->format('d/m/Y') }}</td>
+                                        <td>{{ $order->status}}</td>
+                                    </tr>
+                                @empty
+                                    <tr class="text-center">
+                                        <td colspan="10">No Record Found!</td>
+                                    </tr>
+                                @endforelse 
+                            </tbody>
+                            <tfoot>
+                           
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> 
     </div>
 </div>
 

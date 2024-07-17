@@ -12,7 +12,7 @@ class AdminController extends Controller
     public function index()
     {   
         if(Auth::user()->role_as == 'admin'){    
-            $users = User::where('role_as', 'user')->orWhere('role_as','staff')->latest()->get();
+            $users = User::where('role_as', 'user')->orWhere('role_as','staff')->latest()->paginate(5);
             return view('admin.index', ['users' => $users]);
         } else {
             return redirect()->route('home')->with('status', 'Unauthorized access');

@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    use Illuminate\Support\Facades\Auth;
+@endphp
 
 <div class="container">
     <div class="row">
@@ -27,19 +30,23 @@
                     <th>Order Name</th>
                     <th>Receiver</th>
                     <th>Issue Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($orders as $order)
-                    <tr>
+                    <tr class="align-middle">
                         <td>{{ $order->id }}</td>
                         <td>{{ $order->name }}</td>
                         <td>{{ $order->receiver->name}}</td>
                         <td>{{ $order->created_at->format('d, M, Y') }}</td>
-                        <td>
-                            <a href="{{route('report.report_detail', $order->id)}}">View</a>
+                        <td class="d-flex">
+                            <a class="btn btn-outline-primary" href="{{route('report.report_detail', $order->id)}}">View</a>
+                            @if(Auth::user()->role_as == 'admin')
+                            <a class="btn btn-outline-warning" href="{{route('report.edit', $order->id)}}">edit</a>
+                            @endif
                         </td>
-                        <td> <a href="{{route('report.edit', $order->id)}}">edit</a></td>
+                        
                     </tr>
                 @empty
                     <tr class="text-center">
@@ -48,6 +55,7 @@
                 @endforelse
             </tbody>
         </table>
+        {{ $orders->links()}}
     @endif
 </div>
 @endsection
