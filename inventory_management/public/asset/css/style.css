@@ -15,6 +15,7 @@
     padding-bottom: 50px;
     margin-bottom: 100px;
     border: solid 1px rgb(20, 68, 20);
+    box-shadow: 3px 5px 5px grey;
 }
 
 .card-header{
@@ -128,3 +129,42 @@ ul li:hover{
 .page-body .ball{
     box-shadow: 3px 5px 5px gray;
 }
+
+.button {
+    border-radius: 4px;
+    background-color: #1e62f4;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 15px;
+    padding: 15px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  .button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  .button:hover span {
+    padding-right: 25px;
+  }
+  
+  .button:hover span:after {
+    opacity: 1;
+    right: 0;
+  }

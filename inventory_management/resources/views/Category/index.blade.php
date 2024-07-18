@@ -50,7 +50,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button  onclick="return confirm('Are you sure you want to delete this category?')" class="delete">
-                                                    <i class="fa-regular fa-circle-xmark delete"></i>
+                                                    <i class="fa-regular fa-circle-xmark delete "></i>
                                                 </button>
 
                                             </form>
