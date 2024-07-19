@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="offset-md-4 col-md-4">
-            <form class="yourform mb-5" action="{{ route('report.generate_return_month') }}" method="post">
+            <form class="yourform mb-5" action="{{ route('report.generate_not_return_month') }}" method="post">
                 @csrf
                 <div class="form-group">
                     <input type="month" name="month" class="form-control" value="{{ date('Y-m') }}">

@@ -20,6 +20,7 @@ class ReportController extends Controller
     {
         return view('report.returnProductReport', ['orders' => '']);
     }
+
     public function generate_return_month_wise_report(Request $request)
     {   
         $request->validate(['month' => 'required|date']);
@@ -31,9 +32,31 @@ class ReportController extends Controller
                             ->orWhere('user_id_owner', Auth::user()->id);
                 })
                 ->latest()
-                ->get(),
+                ->paginate(5),
 
         ]); 
+    }
+
+    public function not_return_product_report()
+    {
+        return view('report.notReturnProductReport', ['orders' => '']);
+    }
+
+    public function generate_not_return_month_wise_report(Request $request)
+    {
+        $request->validate(['month' => 'required|date']);
+        $orders = Order::select('orders.*')
+        ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+        ->where('order_details.user_id_owner', Auth::user()->id)
+        ->where('orders.order_date', 'LIKE', '%' . $request->month . '%')
+        ->where('orders.delete_flag', 0)
+        ->where('orders.status', 'approved')
+        ->distinct()
+        ->latest()
+        ->paginate(5);
+        return view('report.notReturnProductReport', [
+            'orders' => $orders,
+        ]);
     }
 
     public function date_wise()
@@ -45,7 +68,15 @@ class ReportController extends Controller
     {
         $request->validate(['date' => "required|date"]);
         return view('report.dateWise', [
-            'orders' => Order::where('order_date', 'LIKE', '%' . $request->date . '%')->where('delete_flag', 0)->latest()->get()
+            'orders' => Order::where('order_date', 'LIKE', '%' . $request->date . '%')
+                ->where('delete_flag', 0)
+                ->where('status', 'approved')
+                ->where(function ($query) {
+                    $query->where('user_id', Auth::user()->id)
+                        ->orWhere('user_id_owner', Auth::user()->id);
+                })
+                ->latest('order_date')
+                ->paginate(5),
         ]);
     }
 
@@ -66,7 +97,7 @@ class ReportController extends Controller
                         ->orWhere('user_id_owner', Auth::user()->id);
                 })
                 ->latest('order_date')
-                ->get(),
+                ->paginate(5),
         ]);
     }
 
@@ -74,13 +105,13 @@ class ReportController extends Controller
     {    
         try {
             $order = Order::find($id);
-            if ($order->user_id == Auth::user()->id && $order->user_id_owner == Auth::user()->id) {
+            if ($order->user_id == Auth::user()->id || $order->user_id_owner == Auth::user()->id || Auth::user()->role_as == 'admin') {
                 return view('report.reportDetail', ['order' => $order]);
             } else {
-                return redirect()->route('home')->with('status', 'You are not authorized to view this report.');
+                return redirect()->route('home')->with('error', 'You are not authorized to view this report.');
             }
         } catch (\Exception $e) {
-            return redirect()->route('home')->with('status', $e->getMessage());
+            return redirect()->route('home')->with('error', $e->getMessage());
         }
     }
 
@@ -132,7 +163,7 @@ class ReportController extends Controller
             $order->save();
         }
     }
-      return redirect()->route('report.date')->with('success', 'suwa sản phẩm thành công');
+      return redirect()->route('report.date')->with('success', 'Edit report successfully');
     }
 
     public function edit($id)

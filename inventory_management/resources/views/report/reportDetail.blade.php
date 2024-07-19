@@ -47,6 +47,7 @@
                                                 <th class="text-center">Item</th>
                                                 <th class="text-center">Category</th>
                                                 <th class="text-center">Quantity</th>
+                                                <th class="text-center">Damaged</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -54,7 +55,12 @@
                                             <tr>
                                                 <td class="text-center">{{ $item->product->name }}</td>
                                                 <td class="text-center">{{ $item->product->category->name }}</td>                                   
-                                                <td class="text-center">{{ $item->quantity }}</td>                                       
+                                                <td class="text-center">{{ $item->quantity }}</td>
+                                                @if($item->issue_starus == "Broken")
+                                                <td class="text-center">Yes</td>
+                                                @else
+                                                <td class="text-center">No</td>  
+                                                @endif                                
                                             </tr>
                                             @endforeach                                   
                                         </tbody>

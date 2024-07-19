@@ -14,7 +14,7 @@ class ReceiverController extends Controller
     public function index()
     {
         $request_user = Auth::user();
-        if ($request_user->role_as == 'admin') {
+        if ($request_user->role_as == 'admin' || $request_user->role_as == 'staff') {
             $receivers = Receiver::paginate(5);
             
             return view('receiver.index', [
@@ -22,7 +22,7 @@ class ReceiverController extends Controller
                 'request_user' => $request_user
             ]);
         } else {
-            return redirect()->route('home')->with('status', 'Unauthorized access.');
+            return redirect()->route('home')->with('error', 'Unauthorized access.');
         }
 
     }
@@ -36,10 +36,10 @@ class ReceiverController extends Controller
     {
         $request->validate([
 
-            'name' =>'required|max:100|max:100',
-            'email' =>'required|max:100|max:100',
-            'phone' =>'required|max:100|max:100',
-            'address' =>'required|max:100|max:100',
+            'name' =>'required|max:255',
+            'email' =>'required|regex:/^[^@]+@[^@]+$/|max:255',
+            'phone' =>'required|max:11|min:10|regex:/^[0-9]{10,11}$/',
+            'address' =>'required|max:255',
 
         ]);
 
@@ -63,21 +63,19 @@ class ReceiverController extends Controller
                 return view('receiver.edit', ['receiver' => $receiver]);
             }
             else{
-                return redirect()->route('home')->with('status', 'Unauthorized access.');
+                return redirect()->route('home')->with('error', 'Unauthorized access.');
             }
         } catch (\Exception $e) {
-            return redirect()->route('home')->with('status', $e->getMessage());
+            return redirect()->route('home')->with('error', $e->getMessage());
         }
     }
 
     public function update(Request $request, $id)
     {
-        
         $request->validate([
-
             'name' =>'required|max:100',
-            'email' =>'required|max:100',
-            'phone' =>'required|max:100',
+            'email' =>'required|max:100|regex:/^[^@]+@[^@]+$/',
+            'phone' =>'required|max:11|min:10',
             'address' =>'required|max:100',
 
         ]);

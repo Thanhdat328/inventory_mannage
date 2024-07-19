@@ -2,13 +2,22 @@
 
 @section('content')
 <div class="container table-responsive">
+@if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="row">
         <div class="col-md-4">
             <h2 class="admin-heading">All User</h2>
         </div>
-        <div class="offset-md-6 col-md-2">
-            <a class="add-new" href="{{ route('admin.create') }}">Add user</a>
-        </div>
+       
     </div>
    <div class="row">
         <div class="col-md-12"></div>
@@ -18,15 +27,12 @@
             <tr>
                 <th>Name</th>
                 <th>Email</th>
-                
-
-
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($users as $user)
-                <tr>
+                <tr class="align-middle">
                     <td><strong>{{$user->name}}</strong></td>
                     <td>{{$user->email}}</td>
                     
@@ -39,6 +45,7 @@
             @endforeach
         </tbody>
     </table>
+    {{ $users->links()}}
 
     <div id="modal">
         <div id="modal-form">

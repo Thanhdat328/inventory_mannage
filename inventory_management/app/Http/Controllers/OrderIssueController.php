@@ -28,10 +28,8 @@ class OrderIssueController extends Controller
     
     public function addProductToOrder(Request $request)
     {   
-        try{
+        try {
             $numberOfItems = count($request->addMoreInputFields);
-            $product = Product::find($request->product_id);
-
             $order = new Order();
             $order->name = $request->input('order_name');
             $order->user_id = Auth::user()->id;
@@ -39,62 +37,85 @@ class OrderIssueController extends Controller
             $order->order_date = now(); 
 
             $check = false;
-            for($i= 1; $i <= $numberOfItems; $i++) {
+            for ($i = 1; $i <= $numberOfItems; $i++) {
                 $id1 = $request->product_id[$i];
                 $products = Product::find($id1['product_id']);
                 if ($products->user_id != Auth::user()->id) {
-                    $order->status = 'pending';
-                    $order->user_id_owner = $products->user_id;
-                    $order->save();
-                    $check = true;
-                }  
+                    $check = true; 
+                }
             }
-            if (!$check) {
-                $order->status = 'approved';
-                $order->user_id_owner = Auth::user()->id;
-                $order->save();
-            }
+            
             $request->validate([
                 'receiver_id' => 'required',
-                'addMoreInputFields.*.quantity' => 'required|max:' . intval($products->quantity),
-                'order_name' => 'required|max:50',
+                'order_name' => 'required|max:50|min:3',
+                'addMoreInputFields.*.quantity' => 'required|integer|min:1',
+            ], [
+                'receiver_id.required' => 'The receiver field is required.',
+                'order_name.required' => 'The order name field is required.',
+                'addMoreInputFields.*.quantity.required' => 'Quantity is required.',
+                'addMoreInputFields.*.quantity.min' => 'Quantity must be at least 1.'
             ]);
+
+            $allQuantitiesValid = true;
+            $quantities = [];
             
-            $numberOfItems = count($request->addMoreInputFields);
             for ($i = 1; $i <= $numberOfItems; $i++) {
                 $value = $request->addMoreInputFields[$i];
                 $id1 = $request->product_id[$i];
-
                 $products = Product::find($id1['product_id']);
-
-                if ($value['quantity'] > $products->quantity) {
-                    return redirect()->back()->with("error", "Quantity is not enough");
-                } else {
-                    $products->quantity = $products->quantity - $value['quantity'];
-                }
-
-                if ($products->quantity > 0) {
-                    $products->status = 'Y';
-                    $products->save();
-                } else {
-                    $products->status = 'N';
-                    $products->save();
-                }
                 
-
-                OrderDetails::create([
-                    'order_id' => $order->id,
-                    'product_id' => $id1['product_id'],
-                    'quantity' => $value['quantity'],
-                    'issue_date' => now(), 
-                    'issue_status' => 'Y', 
-                ]);
-            
+                if ($value['quantity'] > $products->quantity) {
+                    $allQuantitiesValid = false;
+                    break;
+                } else {
+                    $quantities[$id1['product_id']] = $value['quantity'];
+                }
             }
+
+            if (!$allQuantitiesValid) {
+                return redirect()->back()->with("error", "One or more products have insufficient quantity.");
+            }
+
+            if (Auth::user()->role_as == 'admin') {
+                $order->status = 'approved';
+                $order->user_id_owner = Auth::user()->id;
+            } else {
+                if ($check) {
+                    $order->status = 'pending';
+                    $order->user_id_owner = $products->user_id; // Set based on any product owner
+                } else {
+                    $order->status = 'approved';
+                    $order->user_id_owner = Auth::user()->id;
+                }
+            }
+
+            $order->save();
+
+            foreach ($quantities as $productId => $quantity) {
+                $product = Product::find($productId);
+                $product->quantity -= $quantity;
+                $product->status = $product->quantity > 0 ? 'Y' : 'N';
+                $product->save();
+
+                $order_detail = new OrderDetails();
+                $order_detail->order_id = $order->id;
+                $order_detail->product_id = $productId;
+                $order_detail->quantity = $quantity;
+                $order_detail->issue_date = now();
+                $order_detail->user_id_owner = $product->user_id;
+                
+                if (Auth::user()->role_as == 'admin' || $order_detail->user_id_owner == Auth::user()->id) {
+                    $order_detail->approved = true;
+                } else {
+                    $order_detail->approved = false;
+                }
+                $order_detail->save();
+            }
+
             return redirect()->back()->with("success", "Order added successfully");
         }
-        catch(\Exception $e){
-            return redirect()->route('home')->with('error', 'error_message: '.$e->getMessage());
+        catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error: '.$e->getMessage());
         }
     }
 }

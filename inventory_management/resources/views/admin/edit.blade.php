@@ -3,6 +3,18 @@
 @section('content')
 
 <div class="container">
+@if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+    <h1>Update user</h1>
     <form action="{{route('admin.update', $user->id)}}" method="post">
         @csrf
         @method('put')
@@ -26,7 +38,7 @@
             </select>
         </div>
         
-        <button>ADD</button>
+        <button class="btn btn-primary">Update</button>
     </form>
 </div>
     

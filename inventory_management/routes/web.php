@@ -66,7 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [CategoriesController::class,'index'])->name('category');
         Route::get('edit/{category}', [CategoriesController::class, 'edit'])->name('category.edit');
         Route::post('edit/{category}', [CategoriesController::class, 'update'])->name('category.update');
-        Route::get('add', [CategoriesController::class, 'create']);
+        Route::get('add', [CategoriesController::class, 'create'])->name('category.create');
         Route::post('store', [CategoriesController::class, 'store'])->name('category.store');
         Route::delete('destroy/{category}', [CategoriesController::class, 'destroy'])->name('category.destroy');
         Route::get('show/{category}', [CategoriesController::class, 'show'])->name('category.show');
@@ -107,6 +107,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/month', [ReportController::class, 'generate_month_wise_report'])->name('report.generate_month');
         Route::get('/month/return', [ReportController::class, 'return_product_report'])->name('report.return_month');
         Route::post('/month/return', [ReportController::class, 'generate_return_month_wise_report'])->name('report.generate_return_month');
+        Route::get('/month/notReturn', [ReportController::class, 'not_return_product_report'])->name('report.not_return_month');
+        Route::post('/month/notReturn', [ReportController::class, 'generate_not_return_month_wise_report'])->name('report.generate_not_return_month');
         Route::get('/{id}', [ReportController::class, 'report_details'])->name('report.report_detail');
         Route::get('/{id}/edit', [ReportController::class, 'edit'])->name('report.edit');
         Route::post('/{id}/edit', [ReportController::class, 'update'])->name('report.update');
@@ -118,7 +120,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('{id}', [ReturnOrderCotroller::class, 'show'])->name('return_order.show');
         Route::put('{id}/return', [ReturnOrderCotroller::class,'returnOrder'])->name('return_order.main');
         Route::get('{orderId}/{itemId}/editDamage/{id}', [ReturnOrderCotroller::class, 'editDamageView'])->name('return_order.edit_damage');
-        Route::put('{orderId}/{productId}/updateDamage', [ReturnOrderCotroller::class, 'updateDamage'])->name('return_order.update_damage');
+        Route::post('/return_order/{id}/updateDamage/{productId}', [ReturnOrderCotroller::class, 'updateDamage'])->name('return_order.update_damage');
     });
 
     Route::prefix('admin')->group(function () {
