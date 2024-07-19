@@ -15,8 +15,8 @@
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
+            <div class="col-md-8 ball">
+                <div class="card ball">
                     <div class="card-header">
                        <div class="hd-login">{{ __('LOG IN') }} </div> 
                     </div>

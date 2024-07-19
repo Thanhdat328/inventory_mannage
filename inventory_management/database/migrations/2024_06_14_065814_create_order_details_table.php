@@ -18,10 +18,6 @@ return new class extends Migration
             $table->integer('quantity');
             $table->timestamp('issue_date');
 
-            // $table->timestamp('return_date')->nullable();
-            // $table->string('issue_starus')->nullable();
-            // $table->timestamp('return_day')->nullable();
-
             $table->timestamps();
         });
     }

@@ -30,7 +30,8 @@ class HomeController extends Controller
         $currentMonth = \Carbon\Carbon::now()->month;
         $currentDate = \Carbon\Carbon::today();
         $products = Product::where('user_id', Auth::user()->id)->count();
-        $categories = Category::count();
+        $categoryCounts = Product::where('user_id', Auth::user()->id)
+        ->groupBy('category_id')->count();
         $order_returns = Order::where('user_id', Auth::user()->id)->where('delete_flag', 1)->where('status', 'approved')->count();
         $order_month_reports =  Order::where('order_date', 'LIKE', '%' . $currentMonth . '%')
         ->where('delete_flag', 0)
@@ -41,20 +42,25 @@ class HomeController extends Controller
         })->count();
         $order_date_reports = Order::where('order_date', 'LIKE', '%' . $currentDate . '%')
         ->where('delete_flag', 0)
-        ->where('status', 'approves')
+        ->where('status', 'approved')
         ->where(function ($query) {
             $query->where('user_id', Auth::user()->id)
                 ->orWhere('user_id_owner', Auth::user()->id);
         })->count();
-        $orders = Order::where('status', 'pending')->where('user_id_owner', Auth::user()->id)->latest()->get();
-        
+
+        $order_pendings = Order::where('status', 'pending')->where('user_id', Auth::user()->id)->count();
+        $orders = Order::where('status', 'pending')->where('user_id_owner', Auth::user()->id)->latest()->paginate(5);
+        $order_rejected = Order::where('status', 'rejected')->where('user_id', Auth::user()->id)->latest()->take(2)->get();
         return view('home', [
             'orders' => $orders,
             'products' => $products, 
-            'categories' => $categories, 
+            'categoryCounts' => $categoryCounts, 
             'order_returns' => $order_returns, 
             'order_month_reports' => $order_month_reports, 
-            'order_date_reports' => $order_date_reports]);
+            'order_date_reports' => $order_date_reports,
+            'order_rejected' => $order_rejected,
+            'order_pendings' => $order_pendings,
+        ]);
     }
     
     public function show($id)

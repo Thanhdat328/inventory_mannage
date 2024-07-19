@@ -36,73 +36,7 @@
 
     <div id="app">
 
-        <nav class="navbar navbar-expand-md navbar-dark bg-hd shadow-sm">
-
-            <div class="container">
-
-                <a class="navbar-brand" href="{{ url('/home') }}">
-
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <!-- <a href=""  onclick="document.getElementById('logout-form').submit();" hidden>
-
-                                {{ __('Logout') }}
-                            </a>
-                            <form action="{{route('logout')}}" method="post" id="logout-form"> @csrf
-                                <input type="submit" value="logout"> -->
-
-                            </form>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-
+    
 
         <header class="navbar navbar-expand-md d-print-none navbar-dark bg-hd shadow-sm">
             <div class="container-xl">
@@ -110,7 +44,7 @@
                     aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal m-0">
                     <a href="{{ url('/') }}">
                         Laravel
                     </a>
@@ -124,7 +58,7 @@
                             aria-label="Open user menu">
                            
                             <div class="d-none d-xl-block ps-2">
-                                <div>{{ Auth::user()->name }}</div>
+                                <div>{{ Auth::user()->name }} <i class="fa-solid fa-caret-down"></i></div>                                
                             </div>
                         </a>
                         <div class="dropdown-menu">
@@ -150,7 +84,7 @@
             </div>
         </header>
 
-        <div class="container">
+        <div class="container pt-3">
             <header class="navbar-expand-md">
                 <div class="collapse navbar-collapse" id="navbar-menu">
                     <div class="navbar">
@@ -297,9 +231,71 @@
                                     </a>
                                 
                                 </li>
-                            </ul>
 
-                            
+                                <li
+                                    class="nav-item dropdown {{ request()->is('suppliers*', 'customers*') ? 'active' : null }}">
+                                    <a class="nav-link" href="{{route('category')}}">
+                                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="icon icon-tabler icon-tabler-layers-subtract" width="24"
+                                                height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path
+                                                    d="M8 4m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />
+                                                <path d="M16 16v2a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2h2" />
+                                            </svg>
+                                        </span>
+                                        <span class="nav-link-title">
+                                            {{ __('Categories') }}
+                                        </span>
+                                    </a>
+                                
+                                </li>
+                                @if (Auth::user()->role_as =="admin")
+                                <li
+                                    class="nav-item dropdown {{ request()->is('suppliers*', 'customers*') ? 'active' : null }}">
+                                    <a class="nav-link" href="{{route('admin.index')}}">
+                                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="icon icon-tabler icon-tabler-layers-subtract" width="24"
+                                                height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path
+                                                    d="M8 4m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />
+                                                <path d="M16 16v2a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2h2" />
+                                            </svg>
+                                        </span>
+                                        <span class="nav-link-title">
+                                            {{ __('Admin') }}
+                                        </span>
+                                    </a>
+                                
+                                </li>
+                                @endif
+                                <li class="nav-item dropdown d-md-none d-block">
+                                    <!-- Hidden on mobile, visible on desktop -->
+                                    <form action="{{ route('logout') }}" method="post">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="icon dropdown-item-icon icon-tabler icon-tabler-logout" width="24"
+                                                height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path
+                                                    d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
+                                                <path d="M9 12h12l-3 -3" />
+                                                <path d="M18 15l3 -3" />
+                                            </svg>
+                                            Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -316,6 +312,8 @@
     </div>
     
     @yield('content')
+
+
     
     <script src="{{asset('asset/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('asset/js/jquery-3.7.1.min.js')}}"></script>
