@@ -201,7 +201,7 @@
                                     <tr class="align-middle">
                                         <td>{{ $order->id }}</td>
                                         <td>{{ $order->name }}</td>
-                                        <td>{{ $order->receiver->name}}</td>
+                                        <td>{{ $order->receiver->name}}</td>z
                                         <td>{{ \Carbon\Carbon::parse($order->order_date)->format('d/m/Y') }}</td>
                                         <td>
                                             <a class="btn btn-outline-primary" href="{{route('home.show', $order->id)}}">View</a>

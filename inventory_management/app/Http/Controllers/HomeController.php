@@ -61,9 +61,11 @@ class HomeController extends Controller
         ->where('order_details.user_id_owner', Auth::user()->id)
         ->where('orders.status', 'pending')
         ->where('orders.user_id', '!=', Auth::user()->id)
-        ->where('order_details.approved', 0) 
+        ->where('order_details.approved', 0)
+        ->groupBy('orders.id')
         ->latest()
         ->paginate(5);
+
         $order_rejected = Order::where('status', 'rejected')->where('user_id', Auth::user()->id)->latest()->take(2)->get();
         return view('home', [
             'orders' => $orders,
@@ -81,72 +83,66 @@ class HomeController extends Controller
     public function show($id)
     {
         try {
-            // Fetch order details for the given order_id
-            $orderDetails = DB::table('order_details')->where('order_id', $id)->get();
             $userId = Auth::user()->id;
-            $hasAccess = false;
-    
-            // Check if the authenticated user has access to any of these details
-            foreach ($orderDetails as $detail) {
-                if ($detail->user_id_owner == $userId) {
-                    $hasAccess = true;
-                    break;
-                }
-            }
-    
-            if ($hasAccess) {
-                // Fetch the order
-                $order = Order::find($id);
-    
-                // Debugging output
-  
-    
-                // Pass order and order details to the view
-                return view('home.show', [
-                    'order' => $order,
-                    'orderDetails' => $orderDetails
-                ]);
-            } else {
+
+            $order = Order::with('details.product.category')->findOrFail($id);
+
+            $hasAccess = $order->details->contains(function ($detail) use ($userId) {
+                return $detail->user_id_owner == $userId;
+            });
+
+            if (!$hasAccess) {
                 return redirect()->route('home')->with('error', 'Unauthorized access');
             }
+
+            return view('home.show', [
+                'order' => $order,
+                'orderDetails' => $order->details
+            ]);
         } catch (\Exception $e) {
             return redirect()->route('home')->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
+
     
     public function approved(Request $request, $id) 
     {
         try {
             // Check if the authenticated user is the owner in order_details
             $userId = Auth::user()->id;
-            $orderDetail = OrderDetails::where('order_id', $id)
+
+            // Find all order details where user_id_owner is the current user and order_id matches
+            $orderDetails = OrderDetails::where('order_id', $id)
                 ->where('user_id_owner', $userId)
-                ->first();
-    
-            if (!$orderDetail) {
+                ->get();
+
+            if ($orderDetails->isEmpty()) {
                 return redirect()->route('home')->with('error', 'You are not authorized to approve this order.');
             }
-    
-            // Mark the order detail as approved
-            $orderDetail->approved = true;
-            $orderDetail->save();
-    
+
+            // Mark all relevant order details as approved
+            foreach ($orderDetails as $orderDetail) {
+                $orderDetail->approved = true;
+                $orderDetail->save();
+            }
+
             // Check if all order details for this order are approved
             $allApproved = OrderDetails::where('order_id', $id)
                 ->where('approved', false)
                 ->doesntExist();
-    
+
             if ($allApproved) {
                 $order = Order::find($id);
                 $order->status = 'approved';
                 $order->save();
             }
-    
+
             return redirect()->route('home')->with('success', 'Your approval has been recorded.');
         } catch (\Exception $e) {
             return redirect()->route('home')->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
+
 
     public function rejected(Request $request, $id)
     {

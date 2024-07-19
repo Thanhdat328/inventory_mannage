@@ -28,14 +28,14 @@ class OrderIssueController extends Controller
     
     public function addProductToOrder(Request $request)
     {   
-        
+        try {
             $numberOfItems = count($request->addMoreInputFields);
             $order = new Order();
             $order->name = $request->input('order_name');
             $order->user_id = Auth::user()->id;
             $order->receiver_id = $request->input('receiver_id');
             $order->order_date = now(); 
-    
+
             $check = false;
             for ($i = 1; $i <= $numberOfItems; $i++) {
                 $id1 = $request->product_id[$i];
@@ -47,7 +47,7 @@ class OrderIssueController extends Controller
             
             $request->validate([
                 'receiver_id' => 'required',
-                'order_name' => 'required|max:50',
+                'order_name' => 'required|max:50|min:3',
                 'addMoreInputFields.*.quantity' => 'required|integer|min:1',
             ], [
                 'receiver_id.required' => 'The receiver field is required.',
@@ -55,8 +55,7 @@ class OrderIssueController extends Controller
                 'addMoreInputFields.*.quantity.required' => 'Quantity is required.',
                 'addMoreInputFields.*.quantity.min' => 'Quantity must be at least 1.'
             ]);
-    
-            // Check if all quantities are valid
+
             $allQuantitiesValid = true;
             $quantities = [];
             
@@ -69,50 +68,54 @@ class OrderIssueController extends Controller
                     $allQuantitiesValid = false;
                     break;
                 } else {
-                    $quantities[$id1['product_id']] = $value['quantity']; // Store valid quantities
+                    $quantities[$id1['product_id']] = $value['quantity'];
                 }
             }
-    
+
             if (!$allQuantitiesValid) {
                 return redirect()->back()->with("error", "One or more products have insufficient quantity.");
             }
-    
-            // Set order status
-            if ($check) {
-                $order->status = 'pending';
-                $order->user_id_owner = $products->user_id; // Set based on any product owner
-            } else {
+
+            if (Auth::user()->role_as == 'admin') {
                 $order->status = 'approved';
                 $order->user_id_owner = Auth::user()->id;
+            } else {
+                if ($check) {
+                    $order->status = 'pending';
+                    $order->user_id_owner = $products->user_id; // Set based on any product owner
+                } else {
+                    $order->status = 'approved';
+                    $order->user_id_owner = Auth::user()->id;
+                }
             }
-    
+
             $order->save();
-    
-            // Update quantities and create order details
+
             foreach ($quantities as $productId => $quantity) {
                 $product = Product::find($productId);
                 $product->quantity -= $quantity;
                 $product->status = $product->quantity > 0 ? 'Y' : 'N';
                 $product->save();
-    
-                
+
                 $order_detail = new OrderDetails();
                 $order_detail->order_id = $order->id;
                 $order_detail->product_id = $productId;
                 $order_detail->quantity = $quantity;
                 $order_detail->issue_date = now();
                 $order_detail->user_id_owner = $product->user_id;
-                if ($order_detail->user_id_owner == Auth::user()->id) {
+                
+                if (Auth::user()->role_as == 'admin' || $order_detail->user_id_owner == Auth::user()->id) {
                     $order_detail->approved = true;
                 } else {
                     $order_detail->approved = false;
                 }
                 $order_detail->save();
             }
-    
-            return redirect()->back()->with("success", "Order added successfully");
-       
-    }
-    
 
+            return redirect()->back()->with("success", "Order added successfully");
+        }
+        catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error: '.$e->getMessage());
+        }
+    }
 }
