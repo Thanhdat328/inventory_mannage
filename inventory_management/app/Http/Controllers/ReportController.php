@@ -22,19 +22,28 @@ class ReportController extends Controller
     }
 
     public function generate_return_month_wise_report(Request $request)
-    {   
-        $request->validate(['month' => 'required|date']);
-        return view('report.returnProductReport', [
-            'orders' => Order::where('return_date', 'LIKE', '%' . $request->month . '%')
-                ->where('delete_flag', 1)
-                ->where(function ($query) {
-                    $query->where('user_id', Auth::user()->id)
-                            ->orWhere('user_id_owner', Auth::user()->id);
-                })
-                ->latest()
-                ->paginate(5),
+    {
+        // Validate the month input
+        $request->validate([
+            'month' => 'required|date_format:Y-m', // Adjust validation to match 'YYYY-MM' format for month
+        ]);
 
-        ]); 
+        // Extract the month and year from the request
+        $month = \Carbon\Carbon::parse($request->month)->format('Y-m');
+
+        // Fetch orders with return date in the specified month and ensure user_id_owner is the authenticated user
+        $orders = Order::select('orders.*')
+            ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+            ->where('order_details.user_id_owner', Auth::user()->id)
+            ->where('orders.return_date', 'LIKE', '%' . $month . '%')
+            ->where('orders.delete_flag', 1)
+            ->groupBy('orders.id') // Ensure unique orders
+            ->latest()
+            ->paginate(5);
+
+        return view('report.returnProductReport', [
+            'orders' => $orders,
+        ]);
     }
 
     public function not_return_product_report()
