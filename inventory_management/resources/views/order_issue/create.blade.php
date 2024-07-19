@@ -8,6 +8,11 @@
                 {{ session('error') }}
             </div>
         @endif
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="row row-cards">
             <div class="col-lg-7">
                 <div class="card">
@@ -40,7 +45,7 @@
                                         {{ __('Receiver') }}
                                         <span class="text-danger">*</span>
                                     </label>
-                                    <select class="form-select form-control-solid @error('receiver_id') is-invalid @enderror" name="receiver_id" id="receiver_id">
+                                    <select class="form-select form-control-solid @error('receiver_id') is-invalid @enderror" name="receiver_id" id="receiver_id" require>
                                         <option selected disabled>Select a receiver:</option>
                                         @foreach ($receivers as $receiver)
                                             <option value="{{$receiver->id}}" {{ old('receiver_id') == $receiver->id ? 'selected' : '' }}>{{$receiver->name}}</option>

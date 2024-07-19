@@ -23,6 +23,7 @@
                 <th>quantity</th>
                 <th>status</th>
                 <th>category</th>
+                <th>Owner</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -36,6 +37,7 @@
                     <td>In stock</td>
                     @endif
                     <td>{{ $product->category->name }}</td>
+                    <td>{{ $product->user->name}}</td>
                     <td class="d-flex">
                         <a class="btn btn-outline-warning view-btn ms-2" href="{{route('product.edit',$product->id)}}">Edit</a>
                         <form action="{{route('product.destroy',$product->id)}}" method="post">

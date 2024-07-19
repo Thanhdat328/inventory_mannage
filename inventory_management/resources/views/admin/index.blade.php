@@ -2,6 +2,17 @@
 
 @section('content')
 <div class="container table-responsive">
+@if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="row">
         <div class="col-md-4">
             <h2 class="admin-heading">All User</h2>

@@ -3,7 +3,7 @@
 @section ('content')
     <div class="page-body">
         <div class="container-xl">
-            <form action="{{route('return_order.main',$order->id)}}" method="POST">
+            <form action="{{route('return_order.main', $order->id)}}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="card">
@@ -48,6 +48,7 @@
                                         <th scope="col" class="align-middle text-center">Product Name</th>
                                         <th scope="col" class="align-middle text-center">Product Code</th>
                                         <th scope="col" class="align-middle text-center">Quantity</th>
+                                        <th scope="col" class="align-middle text center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -72,7 +73,7 @@
                                                 <input type="text" value="{{$item->product->id}}" name="productId[]" readonly class="d-none">
                                             </td>                                       
                                             <td colspan="6" class="text-center">
-                                                <a href="{{route('return_order.edit_damage',[$item->id, $order->id, $item->product->id ])}}">+</a>
+                                                <a class="btn btn-primary" href="{{route('return_order.edit_damage',[$item->id, $order->id, $item->product->id ])}}">+</a>
                                             </td>
                                         </tr>
                                         </tr>
@@ -88,11 +89,12 @@
                                         </td>
                                     </tr>
                                 </tbody>
+                                <button class="btn btn-primary">Return product</button>
                             </table>
                         </div>
                     </div>
                 </div>
-                <button>Return product</button>
+                
             </form>
         </div>
     </div>

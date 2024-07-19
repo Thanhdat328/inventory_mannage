@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\OrderDetails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -51,9 +53,17 @@ class HomeController extends Controller
             $query->where('user_id', Auth::user()->id)
                 ->orWhere('user_id_owner', Auth::user()->id);
         })->count();
-
+        
         $order_pendings = Order::where('status', 'pending')->where('user_id', Auth::user()->id)->count();
-        $orders = Order::where('status', 'pending')->where('user_id_owner', Auth::user()->id)->latest()->paginate(5);
+    
+        $orders = Order::select('orders.*')
+        ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+        ->where('order_details.user_id_owner', Auth::user()->id)
+        ->where('orders.status', 'pending')
+        ->where('orders.user_id', '!=', Auth::user()->id)
+        ->where('order_details.approved', 0) 
+        ->latest()
+        ->paginate(5);
         $order_rejected = Order::where('status', 'rejected')->where('user_id', Auth::user()->id)->latest()->take(2)->get();
         return view('home', [
             'orders' => $orders,
@@ -71,24 +81,71 @@ class HomeController extends Controller
     public function show($id)
     {
         try {
-            $orders = Order::find($id);
-            if($orders->user_id_owner == Auth::user()->id){
-                $order = Order::where('id', $id)->latest()->first();
-                return view('home.show', ['order' => $order]);
+            // Fetch order details for the given order_id
+            $orderDetails = DB::table('order_details')->where('order_id', $id)->get();
+            $userId = Auth::user()->id;
+            $hasAccess = false;
+    
+            // Check if the authenticated user has access to any of these details
+            foreach ($orderDetails as $detail) {
+                if ($detail->user_id_owner == $userId) {
+                    $hasAccess = true;
+                    break;
+                }
             }
-            else {
-                return redirect()->route('home')->with('status', 'Unauthorized access');
+    
+            if ($hasAccess) {
+                // Fetch the order
+                $order = Order::find($id);
+    
+                // Debugging output
+  
+    
+                // Pass order and order details to the view
+                return view('home.show', [
+                    'order' => $order,
+                    'orderDetails' => $orderDetails
+                ]);
+            } else {
+                return redirect()->route('home')->with('error', 'Unauthorized access');
             }
         } catch (\Exception $e) {
-            return redirect()->route('home')->with('status', 'An error occurred: '.$e->getMessage());
+            return redirect()->route('home')->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
-
-    public function approved(Request $request, $id) {
-        $order = Order::find($id);
-        $order->status = 'approved';
-        $order->save();
-        return redirect()->route('home');
+    
+    public function approved(Request $request, $id) 
+    {
+        try {
+            // Check if the authenticated user is the owner in order_details
+            $userId = Auth::user()->id;
+            $orderDetail = OrderDetails::where('order_id', $id)
+                ->where('user_id_owner', $userId)
+                ->first();
+    
+            if (!$orderDetail) {
+                return redirect()->route('home')->with('error', 'You are not authorized to approve this order.');
+            }
+    
+            // Mark the order detail as approved
+            $orderDetail->approved = true;
+            $orderDetail->save();
+    
+            // Check if all order details for this order are approved
+            $allApproved = OrderDetails::where('order_id', $id)
+                ->where('approved', false)
+                ->doesntExist();
+    
+            if ($allApproved) {
+                $order = Order::find($id);
+                $order->status = 'approved';
+                $order->save();
+            }
+    
+            return redirect()->route('home')->with('success', 'Your approval has been recorded.');
+        } catch (\Exception $e) {
+            return redirect()->route('home')->with('error', 'An error occurred: ' . $e->getMessage());
+        }
     }
 
     public function rejected(Request $request, $id)

@@ -36,24 +36,38 @@ class AdminController extends Controller
     }
 
     public function update(Request $request)
-    {
-        try {
-            if(Auth::user()->role_as == 'admin'){    
-                $user = User::findOrFail($request->id);
-                $user->name = $request->name; 
-                $user->email = $request->email;
-                $user->role_as = $request->role_as;
-                $user->save();
-                return redirect()->route('admin.index')->with('status', 'User updated successfully');
+{
+    try {
+        // Check if the user is an admin
+        if (Auth::user()->role_as == 'admin') {    
+            // Validate the incoming request data
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:users,email,' . $request->id,
+                'role_as' => 'required|string|in:admin,user',
+            ]);
+           
+           
+            // Find and update the user
+            $user = User::findOrFail($request->id);
+            if ($user->name == $request->name && $user->email == $request->email && $user->role_as == $request->role_as) {
+                return redirect()->back()->with('error', 'No changes made to the user.');
             }
-            else {
-                return redirect()->route('home')->with('status', 'Unauthorized access');
-            }
+            $user->name = $request->name; 
+            $user->email = $request->email;
+            $user->role_as = $request->role_as;
+            
+            $user->save();
+
+            return redirect()->route('admin.index')->with('success', 'User updated successfully');
+        } else {
+            return redirect()->route('home')->with('error', 'Unauthorized access');
         }
-        catch (\Exception $e) {
-            return redirect()->route('home')->with('status', $e->getMessage());
-        }
+    } catch (\Exception $e) {
+        return redirect()->route('admin.edit', $request->id)->with('error', 'Error updating user: ' . $e->getMessage());
     }
+}
+
     
     public function create() 
     {
@@ -88,7 +102,7 @@ class AdminController extends Controller
             else {
                 return redirect()->route('home')->with('status', 'Unauthorized access');
             }
-        }
+        } 
         catch (\Exception $e ) {
             return redirect()->route('home')->with('status', $e->getMessage());
         }

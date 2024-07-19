@@ -28,7 +28,7 @@ class OrderIssueController extends Controller
     
     public function addProductToOrder(Request $request)
     {   
-        try {
+        
             $numberOfItems = count($request->addMoreInputFields);
             $order = new Order();
             $order->name = $request->input('order_name');
@@ -47,8 +47,13 @@ class OrderIssueController extends Controller
             
             $request->validate([
                 'receiver_id' => 'required',
-                'addMoreInputFields.*.quantity' => 'required|integer|min:1',
                 'order_name' => 'required|max:50',
+                'addMoreInputFields.*.quantity' => 'required|integer|min:1',
+            ], [
+                'receiver_id.required' => 'The receiver field is required.',
+                'order_name.required' => 'The order name field is required.',
+                'addMoreInputFields.*.quantity.required' => 'Quantity is required.',
+                'addMoreInputFields.*.quantity.min' => 'Quantity must be at least 1.'
             ]);
     
             // Check if all quantities are valid
@@ -90,19 +95,23 @@ class OrderIssueController extends Controller
                 $product->status = $product->quantity > 0 ? 'Y' : 'N';
                 $product->save();
     
-                OrderDetails::create([
-                    'order_id' => $order->id,
-                    'product_id' => $productId,
-                    'quantity' => $quantity,
-                    'issue_date' => now(), 
-                    'issue_status' => 'Y', 
-                ]);
+                
+                $order_detail = new OrderDetails();
+                $order_detail->order_id = $order->id;
+                $order_detail->product_id = $productId;
+                $order_detail->quantity = $quantity;
+                $order_detail->issue_date = now();
+                $order_detail->user_id_owner = $product->user_id;
+                if ($order_detail->user_id_owner == Auth::user()->id) {
+                    $order_detail->approved = true;
+                } else {
+                    $order_detail->approved = false;
+                }
+                $order_detail->save();
             }
     
             return redirect()->back()->with("success", "Order added successfully");
-        } catch (\Exception $e) {
-            return redirect()->route('home')->with('error', 'Error message: ' . $e->getMessage());
-        }
+       
     }
     
 

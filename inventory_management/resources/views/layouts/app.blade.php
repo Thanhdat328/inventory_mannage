@@ -157,7 +157,7 @@
                                     </a>
                                 </li>
 
-                                @if(Auth::user()->role_as == 'admin')
+                                @if(Auth::user()->role_as == 'admin' || Auth::user()->role_as == "staff")
                                 <li class="nav-item dropdown {{ request()->is('purchases*') ? 'active' : null }}">
                                     <a class="nav-link" href="{{route('receiver.index')}}">
                                         <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -227,7 +227,7 @@
                                     </a>
                                 
                                 </li>
-
+                                @if(Auth::user()->role_as == 'admin' || Auth::user()->role_as == "staff")
                                 <li
                                     class="nav-item dropdown {{ request()->is('suppliers*', 'customers*') ? 'active' : null }}">
                                     <a class="nav-link" href="{{route('category')}}">
@@ -247,9 +247,9 @@
                                             {{ __('Categories') }}
                                         </span>
                                     </a>
-                                
+                                @endif
                                 </li>
-                                @if (Auth::user()->role_as =="admin")
+                                @if (Auth::user()->role_as =="admin" )
                                 <li
                                     class="nav-item dropdown {{ request()->is('suppliers*', 'customers*') ? 'active' : null }}">
                                     <a class="nav-link" href="{{route('admin.index')}}">
