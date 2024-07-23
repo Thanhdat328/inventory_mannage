@@ -29,7 +29,7 @@
                                 <input for=""name="quantityOld[]" value="{{ $item->quantity }}" class="d-none"></input>
                                 <label for="" name="productId[]" class="d-none">{{$item->product_id}}</label>
                                 <label for="name">Name:{{$item->product->name}}</label> <br>
-                                <input class="form-control" type="text" value="{{$item->id}}" name="orderId[]" class=>
+                                <input class="form-control" type="text" value="{{$item->id}}" name="orderId[]" class="d-none">
                                 <b>Quantity:</b>   <input class="form-control" type="text" class="" id="quantity" name="quantity[]" value="{{ $item->quantity }}">
                             </div>
                         </tr>
